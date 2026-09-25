@@ -15,6 +15,7 @@ import SeparationPanel from './components/SeparationPanel'
 import type { CenterToggles, Measure, MetroData, MetrosFile } from './lib/types'
 import { MEASURES } from './lib/types'
 import { MEASURE_LABEL, fmtCoord, fmtMi } from './lib/format'
+import { bearingDeg, compass16, haversineMi } from './lib/geo'
 import type { Theme } from './lib/theme'
 
 const BASE = import.meta.env.BASE_URL
@@ -61,7 +62,7 @@ export default function App() {
   const [measure, setMeasure] = useState<Measure>(init.measure)
   const [year, setYear] = useState<number | null>(init.year)
   const [playing, setPlaying] = useState(false)
-  const [toggles, setToggles] = useState<CenterToggles>({ income: true, pop: true, aboveAvg: false })
+  const [toggles, setToggles] = useState<CenterToggles>({ income: true, pop: true, aboveAvg: false, cbd: true })
   const [hover, setHover] = useState<{ zip: string; x: number; y: number } | null>(null)
   const [pinned, setPinned] = useState<string | null>(init.zip)
   const [bead, setBead] = useState<BeadHover | null>(null)
@@ -181,6 +182,17 @@ export default function App() {
   const finding = data ? findingText(data, curYear) : ''
   const meta = `#${metro.rank} of ${metros.metros.length} by population · ${metro.zipCount} ZIPs · ${metro.suppressedCount} suppressed in ${years[years.length - 1] ?? ''}`
   const setYearFromChart = (y: number) => { setPlaying(false); setYear(y) }
+  const cbdLine = data && metro.cbd && (() => {
+    const i = Math.max(0, data.years.indexOf(curYear))
+    const c = metro.cbd!, inc = data.centers.income[i], pop = data.centers.pop[i]
+    const d = (p: { lat: number; lon: number }) => `${fmtMi(haversineMi(c.lat, c.lon, p.lat, p.lon))} mi ${compass16(bearingDeg(c.lat, c.lon, p.lat, p.lon))}`
+    return (
+      <p className="cbd-line">
+        <span className="cbd-mark" aria-hidden />
+        <span>From {c.name}, {curYear}: income center <b>{d(inc)}</b>; population center <b>{d(pop)}</b>.</span>
+      </p>
+    )
+  })()
   const stats = <MetroStats mf={metros} metro={metro} year={curYear} />
   const trend = data && (
     <TrendChart years={data.years} values={data.metroAvg.income} benchmark={metros.us?.avgIncome} year={curYear} dollarYear={data.dollarYear} onYear={setYearFromChart} />
@@ -214,7 +226,7 @@ export default function App() {
 
   const centerToggles = (
     <div className="toggles">
-      {([['income', 'Income center'], ['pop', 'Population center'], ['aboveAvg', 'Above-average income']] as const).map(([k, label]) => (
+      {([['income', 'Income center'], ['pop', 'Population center'], ['aboveAvg', 'Above-average income'], ['cbd', 'Downtown (CBD)']] as const).map(([k, label]) => (
         <label key={k} className={`tg tg-${k}${toggles[k] ? '' : ' off'}`}>
           <input type="checkbox" checked={toggles[k]} onChange={(e) => setToggles({ ...toggles, [k]: e.target.checked })} />
           <span className="tg-mark" aria-hidden />{label}
@@ -283,6 +295,7 @@ export default function App() {
               )}
               {sheet === 'expanded' && data && (
                 <div className="sheet-more">
+                  {cbdLine}
                   {stats}
                   {trend}
                   {centerToggles}
@@ -316,6 +329,7 @@ export default function App() {
         </section>
         <section className="p-finding">
           <p className="finding">{finding || 'Loading…'}</p>
+          {cbdLine}
           {data && (
             <p className="stats">
               <span>Gap {data.years[0]} <b>{fmtMi(data.gapMi[0])} mi</b></span>

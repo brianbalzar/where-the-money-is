@@ -363,3 +363,7 @@ html, body { overflow: hidden; overscroll-behavior: none; }
 .vsus .vs-year { font: 700 10px var(--font-ui); fill: var(--fg-2); paint-order: stroke; stroke: var(--bg); stroke-width: 3px; }
 .vs-note { margin: 0; font-size: var(--fs-11); color: var(--fg-4); }
 .trend-key i.k-prop { border-top: 2px dotted var(--fg-3); }
+.tg-cbd .tg-mark { width: 10px; height: 10px; border: 1.6px solid var(--map-label); transform: rotate(45deg); background: radial-gradient(circle, var(--map-label) 0 1.6px, transparent 2px); }
+.cbd-line { margin: 0; display: flex; gap: 8px; align-items: baseline; font-size: var(--fs-12); line-height: 1.45; color: var(--fg-3); }
+.cbd-line b { color: var(--fg-1); font-variant-numeric: tabular-nums; }
+.cbd-mark { flex: none; width: 8px; height: 8px; border: 1.5px solid var(--map-label); transform: rotate(45deg) translateY(1px); }

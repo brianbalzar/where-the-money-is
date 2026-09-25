@@ -13,6 +13,16 @@ describe('metros.json', () => {
     expect(new Set(metros.metros.map((m) => m.id)).size).toBe(50)
     expect(metros.metros.map((m) => m.rank)).toEqual([...metros.metros.map((m) => m.rank)].sort((a, b) => a - b))
   })
+  it('every metro has a CBD inside its map extent, and DFW/MSP use the dominant downtown', () => {
+    for (const m of metros.metros) {
+      expect(m.cbd, m.shortName).toBeTruthy()
+      const [w, s, e, n] = m.bbox
+      expect(m.cbd!.lon).toBeGreaterThan(w); expect(m.cbd!.lon).toBeLessThan(e)
+      expect(m.cbd!.lat).toBeGreaterThan(s); expect(m.cbd!.lat).toBeLessThan(n)
+    }
+    expect(metros.metros.find((m) => m.id === '19100')!.cbd!.name).toBe('Downtown Dallas')
+    expect(metros.metros.find((m) => m.id === '33460')!.cbd!.name).toBe('Downtown Minneapolis')
+  })
   it('includes Dallas–Fort Worth with its curated landmarks', () => {
     const dfw = metros.metros.find((m) => m.id === '19100')!
     expect(dfw.landmarks.map((l) => l.name)).toContain('Colleyville')

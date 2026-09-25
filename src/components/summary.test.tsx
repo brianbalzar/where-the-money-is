@@ -191,6 +191,8 @@ describe('App', () => {
     expect(q.get('measure')).toBe('wealth')
     expect(q.get('year')).toBe('2016')
     expect(screen.getByRole('radio', { name: 'Wealth signal' })).toHaveAttribute('aria-checked', 'true')
+    expect(await screen.findByText(/^From Downtown .*, 2016: income center/)).toBeTruthy()
+    expect(screen.getByRole('checkbox', { name: /Downtown \(CBD\)/ })).toBeChecked()
   })
 
   it('mobile: collapsed sheet stays concise; expanded sheet has stats, trend and ranking', async () => {

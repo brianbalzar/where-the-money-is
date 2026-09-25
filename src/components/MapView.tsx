@@ -31,7 +31,7 @@ interface Props {
 }
 
 type Kind = 'income' | 'pop' | 'aboveAvg'
-const KINDS: Kind[] = ['aboveAvg', 'pop', 'income']
+const KINDS: Kind[] = ['aboveAvg', 'pop', 'income']  // the CBD toggle is handled separately
 const LABEL: Record<Kind, string> = { income: 'Income center', pop: 'Population center', aboveAvg: 'Above-average center' }
 
 function makeImages(map: MLMap) {
@@ -57,6 +57,12 @@ function makeImages(map: MLMap) {
   put('landmark-sq', mk(9, 9, (x) => {
     x.fillStyle = c.bg; x.strokeStyle = c.label; x.lineWidth = 1.2
     x.fillRect(1.9, 1.9, 5.2, 5.2); x.strokeRect(1.9, 1.9, 5.2, 5.2)
+  }))
+  // CBD: outlined diamond with a solid centre
+  put('cbd-icon', mk(16, 16, (x) => {
+    x.fillStyle = c.bg; x.strokeStyle = c.label; x.lineWidth = 1.6
+    x.beginPath(); x.moveTo(8, 1.5); x.lineTo(14.5, 8); x.lineTo(8, 14.5); x.lineTo(1.5, 8); x.closePath(); x.fill(); x.stroke()
+    x.fillStyle = c.label; x.beginPath(); x.arc(8, 8, 2.2, 0, Math.PI * 2); x.fill()
   }))
   put('above-sq', mk(16, 16, (x) => {
     x.fillStyle = c.bg; x.strokeStyle = c.centerAbove; x.lineWidth = 2
@@ -184,6 +190,7 @@ export default function MapView(p: Props) {
   useEffect(() => { if (ready.current) pushChoropleth() }, [p.data, p.geo, p.measure, p.year, p.highlightBin, p.theme]) // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { if (ready.current) pushHighlight() }, [p.hoverZip, p.pinnedZip, p.geo]) // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { if (ready.current) pushCenters(true) }, [p.data, p.year, p.toggles]) // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { if (ready.current) pushCbd() }, [p.toggles.cbd, p.metro.id]) // eslint-disable-line react-hooks/exhaustive-deps
 
   function pushAll() {
     pushGeo()
@@ -199,6 +206,17 @@ export default function MapView(p: Props) {
     ;(map.getSource('landmarks') as GeoJSONSource).setData({
       type: 'FeatureCollection',
       features: metro.landmarks.map((l) => ({ type: 'Feature', properties: { name: l.name }, geometry: { type: 'Point', coordinates: [l.lon, l.lat] } })),
+    })
+    pushCbd()
+  }
+
+  function pushCbd() {
+    const map = mapRef.current!
+    const { metro, toggles } = props.current
+    const c = metro.cbd
+    ;(map.getSource('cbd') as GeoJSONSource).setData({
+      type: 'FeatureCollection',
+      features: c && toggles.cbd ? [{ type: 'Feature', properties: { name: c.name }, geometry: { type: 'Point', coordinates: [c.lon, c.lat] } }] : [],
     })
   }
 

@@ -392,6 +392,24 @@ def short_name(cbsa: str, title: str) -> str:
     return "–".join(cities[:2])
 
 
+def check_cbd(cbsa: str, zcta: gpd.GeoDataFrame) -> dict | None:
+    """Return the configured CBD, after checking it sits in (or within 0.5 mi of) its named ZIP."""
+    c = C.CBD.get(cbsa)
+    if not c:
+        print(f"   ! no CBD configured for {cbsa}")
+        return None
+    g = zcta.set_index("zcta")
+    if c["zip"] not in g.index:
+        raise SystemExit(f"CBD {c['name']}: ZIP {c['zip']} is not a 2020 ZCTA")
+    pt = gpd.GeoSeries([shapely.Point(c["lon"], c["lat"])], crs=4326).to_crs(5070).iloc[0]
+    d_mi = g.loc[[c["zip"]]].to_crs(5070).geometry.iloc[0].distance(pt) / 1609.344
+    if d_mi > 2:
+        raise SystemExit(f"CBD {c['name']} is {d_mi:.1f} mi from ZIP {c['zip']} - check the coordinates")
+    if d_mi > 0.5:
+        print(f"   ! CBD {c['name']} is {d_mi:.1f} mi from ZIP {c['zip']}")
+    return {"name": c["name"], "lat": c["lat"], "lon": c["lon"]}
+
+
 def principal_cities(title: str) -> list[str]:
     out = []
     for c in title.split(",")[0].replace("--", "-").split("-"):
@@ -548,7 +566,10 @@ def main(argv: list[str]) -> None:
         print(f"[{meta['rank']:>2}] {title}: {len(mz)} ZCTAs")
         res = build_metro(cbsa, mz, zcta, agg, years, deflate, name_map)
         lms = C.LANDMARKS.get(cbsa) or auto_landmarks(title, mz, name_map)
-        metros_out.append({**meta, "bbox": res["bbox"], "landmarks": lms,
+        cbd = check_cbd(cbsa, zcta)
+        if cbd:  # drop a landmark that is the same place as the CBD marker
+            lms = [l for l in lms if haversine_mi(l["lat"], l["lon"], cbd["lat"], cbd["lon"]) > 1.5]
+        metros_out.append({**meta, "bbox": res["bbox"], "landmarks": lms, "cbd": cbd,
                            "zipCount": res["zipCount"], "suppressedCount": res["suppressedCount"],
                            "summary": res["summary"]})
 

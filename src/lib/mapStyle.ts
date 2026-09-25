@@ -141,6 +141,17 @@ export function buildStyle(c: MapColors, dark: boolean): StyleSpecification {
       paint: { 'text-color': c.label, 'text-halo-color': c.halo, 'text-halo-width': 3 },
     },
 
+    // ---- CBD: stronger than landmarks, quieter than the centers ----
+    {
+      id: 'cbd', type: 'symbol', source: 'cbd',
+      layout: {
+        'icon-image': 'cbd-icon', 'icon-allow-overlap': true, 'text-allow-overlap': true,
+        'text-field': ['get', 'name'], 'text-font': FONT_BOLD, 'text-size': 11,
+        'text-anchor': 'left', 'text-offset': [0.95, 0], 'text-optional': true,
+      },
+      paint: { 'text-color': c.label, 'text-halo-color': c.halo, 'text-halo-width': 3 },
+    },
+
     // ---- hover / pinned ZIP ----
     {
       id: 'zcta-hl', type: 'line', source: 'zcta',
@@ -161,6 +172,7 @@ export function buildStyle(c: MapColors, dark: boolean): StyleSpecification {
       omt: { type: 'vector', url: `${OFM}/planet` },
       zcta: { type: 'geojson', data: EMPTY as never, promoteId: 'zcta' },
       landmarks: { type: 'geojson', data: EMPTY as never },
+      cbd: { type: 'geojson', data: EMPTY as never },
       trails: { type: 'geojson', data: EMPTY as never },
       beads: { type: 'geojson', data: EMPTY as never },
       markers: { type: 'geojson', data: EMPTY as never },

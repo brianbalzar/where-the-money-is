@@ -14,6 +14,7 @@ export interface MetroMeta {
   states: string[]
   bbox: [number, number, number, number] // w, s, e, n
   landmarks: Landmark[]
+  cbd: Landmark | null         // main central business district
   zipCount: number
   suppressedCount: number
   summary: MetroSummary
@@ -81,4 +82,4 @@ export interface MetroData {
   suppressedZips: string[]      // ZCTAs on the map with no value in the latest year
 }
 
-export interface CenterToggles { income: boolean; pop: boolean; aboveAvg: boolean }
+export interface CenterToggles { income: boolean; pop: boolean; aboveAvg: boolean; cbd: boolean }
