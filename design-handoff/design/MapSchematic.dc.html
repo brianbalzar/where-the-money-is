@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="position:relative;width:100%;height:100%;overflow:hidden;background:{{ land }}">{{ map }}</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:800,&quot;height&quot;:560},&quot;variant&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;a&quot;,&quot;b&quot;,&quot;c&quot;],&quot;default&quot;:&quot;a&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;crop&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;wide&quot;,&quot;square&quot;,&quot;centers&quot;],&quot;default&quot;:&quot;wide&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;markerStyle&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;dots&quot;,&quot;arrow&quot;,&quot;comet&quot;],&quot;default&quot;:&quot;dots&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;px&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:800,&quot;tsType&quot;:&quot;number&quot;},&quot;labels&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;hover&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+const V = {
+  a: { land:'#f4f4f2', minor:'#e4e3df', water:'#cddfee', road:'#6e6c68', casing:'#ffffff', text:'#4a4845', halo:'#ffffff',
+       ramp:['#e8f1fb','#c3daf4','#93bdea','#5d9bdc','#2f78c6','#11539c'], out:'#061f3d', outStroke:'#ffffff',
+       ndBg:'#f4f4f2', ndLine:'#b9b7b2', inc:'#000000', pop:'#009500', op:0.74, font:'Inter, sans-serif', gapBg:'#000', gapFg:'#fff' },
+  ad: { land:'#111110', minor:'#1f1e1c', water:'#0b1a2a', road:'#9C9A95', casing:'#000000', text:'#C9C7C2', halo:'#000000',
+       ramp:['#0f2a4a','#12427a','#1a5fae','#2f7fd9','#5ca6f0','#a9d2ff'], out:'#f2f8ff', outStroke:'#000000',
+       ndBg:'#111110', ndLine:'#4A4845', inc:'#ffffff', pop:'#5CB85C', op:0.8, font:'Inter, sans-serif', gapBg:'#ffffff', gapFg:'#000000' },
+  b: { land:'#17191d', minor:'#24272d', water:'#10263a', road:'#aeb4bf', casing:'#17191d', text:'#c9ced8', halo:'#17191d',
+       ramp:['#fde725','#a5db36','#4ac16d','#1f9e89','#26828e','#31688e'], out:'#440154', outStroke:'#ffffff',
+       ndBg:'#24272d', ndLine:'#4a4f59', inc:'#ff5c8a', pop:'#ffffff', op:0.8, font:'IBM Plex Sans, sans-serif', gapBg:'#ff5c8a', gapFg:'#17191d' },
+  c: { land:'#efe9dd', minor:'#e1d9c7', water:'#c7d8d4', road:'#5c534a', casing:'#f7f3ea', text:'#4a4238', halo:'#f7f3ea',
+       ramp:['#fff4c7','#fedb91','#fdb762','#f68b3a','#d9621d','#a8430e'], out:'#4f1a04', outStroke:'#f7f3ea',
+       ndBg:'#efe9dd', ndLine:'#bfb4a0', inc:'#0b5d6b', pop:'#2a2622', op:0.74, font:'Public Sans, sans-serif', gapBg:'#2a2622', gapFg:'#f7f3ea' }
+};
+const CROPS = { wide:[0,0,800,560], square:[150,90,440,470], centers:[338,228,112,104] };
+const BREAKS = [52,63,76,94,125,190];
+function rng(seed){ let s=seed; return ()=>{ s=(s*16807)%2147483647; return (s-1)/2147483646; }; }
+function g(x,y,cx,cy,a,sd){ const d=(x-cx)**2+(y-cy)**2; return a*Math.exp(-d/(2*sd*sd)); }
+let GEO = null;
+function geo(){
+  if (GEO) return GEO;
+  const R = rng(7), r = 11.5, hw = Math.sqrt(3)*r, vh = 1.5*r, cells = [];
+  for (let row=0; row*vh<600; row++) for (let col=0; col*hw<840; col++){
+    const x = col*hw + (row%2 ? hw/2 : 0), y = row*vh;
+    const dx=(x-400)/385, dy=(y-290)/265, e = dx*dx+dy*dy, wob = 0.09*Math.sin(x/47)+0.07*Math.cos(y/31);
+    if (e > 1+wob) continue;
+    let v = 40 + 26*Math.max(0,Math.min(1,(340-y)/260))
+      + g(x,y,455,300,700,11) + g(x,y,318,236,330,17) + g(x,y,462,286,260,12)
+      + g(x,y,335,278,70,24) + g(x,y,446,142,75,45) + g(x,y,502,196,52,42) + g(x,y,190,338,22,30)
+      - g(x,y,475,420,14,60) + (R()-0.5)*26;
+    v = Math.max(34, v);
+    const supp = R() < 0.03 || (e > 0.82 && R() < 0.22);
+    const pts = [];
+    for (let k=0;k<6;k++){ const a=Math.PI/180*(60*k-30); pts.push((x+(r-0.6)*Math.cos(a)).toFixed(1)+','+(y+(r-0.6)*Math.sin(a)).toFixed(1)); }
+    cells.push({ x, y, v, supp, pts: pts.join(' ') });
+  }
+  const vals = cells.filter(c=>!c.supp && c.v<190).map(c=>c.v).sort((a,b)=>a-b);
+  const br = [1,2,3,4,5].map(k=>vals[Math.floor(vals.length*k/6)]).concat([190]);
+  cells.forEach(c=>{ let b = br.findIndex(q=>c.v<q); c.bin = b===-1?6:b; });
+  const minor = [];
+  for (let i=0;i<34;i++){ const x=20+i*23+R()*8; minor.push(`M${x},0 L${x+(R()-0.5)*30},560`); }
+  for (let i=0;i<24;i++){ const y=10+i*23+R()*8; minor.push(`M0,${y} L800,${y+(R()-0.5)*30}`); }
+  const trail = (a,b,w,ph) => Array.from({length:13},(_,i)=>{ const t=i/12; return [a[0]+(b[0]-a[0])*t+Math.sin(t*7+ph)*w, a[1]+(b[1]-a[1])*t+Math.cos(t*5+ph)*w*0.6]; });
+  GEO = { cells, minor, inc: trail([410,296],[398,250],2.2,0), pop: trail([392,318],[382,297],1.4,1.3) };
+  return GEO;
+}
+const ROADS = [
+  { d:'M470,560 L468,420 L470,330 L455,250 L420,160 L400,40', n:'I-35E', at:[430,185] },
+  { d:'M235,560 L232,420 L230,350 L240,250 L280,150 L330,40', n:'I-35W', at:[252,222] },
+  { d:'M0,354 L230,350 L470,332 L650,315 L800,305', n:'I-30', at:[340,342] },
+  { d:'M0,432 L230,440 L470,445 L800,430', n:'I-20', at:[350,443] },
+  { d:'M360,262 Q450,212 545,250 Q578,330 540,420', n:'I-635', at:[532,262] },
+  { d:'M468,322 L462,250 L452,170 L445,90 L443,20', n:'DNT', at:[449,108] },
+  { d:'M472,330 L495,240 L510,160 L525,40', n:'US-75', at:[512,150] },
+  { d:'M300,300 L340,240 L420,160 L500,150 L620,138', n:'SH-121', at:[372,206] },
+  { d:'M178,300 Q230,258 292,300 Q302,382 232,412 Q168,392 178,300', n:'I-820', at:[183,370] }
+];
+const LAKES = [[405,92,30,17],[352,214,17,9],[592,300,11,27],[390,440,20,8],[188,250,15,13]];
+const MARKS = [['Downtown Dallas',470,330,1],['Downtown Fort Worth',230,350,-1],['Plano',505,200,1],['Frisco',448,140,1],['Colleyville',335,280,-1]];
+
+class Component extends DCLogic {
+  renderVals() {
+    const h = React.createElement, p = this.props;
+    const T = V[p.variant] || V.a, G = geo();
+    const crop = CROPS[p.crop] || CROPS.wide;
+    const s = crop[2] / (p.px || 800);
+    const labels = p.labels ?? true, ms = p.markerStyle || 'dots', cellsOn = p.cells ?? true;
+    const hid = 'h' + (p.variant||'a') + (p.crop||'w') + ms;
+    const kids = [];
+    kids.push(h('defs',{key:'d'}, h('pattern',{id:hid,width:6*s*1.2,height:6*s*1.2,patternUnits:'userSpaceOnUse',patternTransform:'rotate(45)'},
+      h('rect',{width:9*s,height:9*s,fill:T.ndBg}), h('line',{x1:0,y1:0,x2:0,y2:9*s,stroke:T.ndLine,strokeWidth:1.6*s}))));
+    kids.push(h('g',{key:'m',stroke:T.minor,strokeWidth:1.1*s,fill:'none'}, G.minor.map((d,i)=>h('path',{key:i,d}))));
+    if (cellsOn) kids.push(h('g',{key:'c'}, G.cells.map((c,i)=>{
+      if (c.supp) return h('polygon',{key:i,points:c.pts,fill:`url(#${hid})`,stroke:T.ndLine,strokeWidth:0.6*s});
+      const out = c.bin===6;
+      return h('polygon',{key:i,points:c.pts,fill:out?T.out:T.ramp[c.bin],fillOpacity:out?0.95:T.op,stroke:out?T.outStroke:'none',strokeWidth:out?1.3*s:0});
+    })));
+    if (p.hover) { const c = G.cells.reduce((b,c)=>Math.hypot(c.x-493,c.y-212)<Math.hypot(b.x-493,b.y-212)?c:b);
+      kids.push(h('polygon',{key:'hv',points:c.pts,fill:'none',stroke:T.inc,strokeWidth:2.6*s})); }
+    kids.push(h('g',{key:'w',fill:T.water}, LAKES.map((l,i)=>h('ellipse',{key:i,cx:l[0],cy:l[1],rx:l[2],ry:l[3]}))));
+    kids.push(h('g',{key:'rc',stroke:T.casing,strokeWidth:5*s,fill:'none',strokeLinecap:'round',strokeLinejoin:'round'}, ROADS.map((r,i)=>h('path',{key:i,d:r.d}))));
+    kids.push(h('g',{key:'rl',stroke:T.road,strokeWidth:2.1*s,fill:'none',strokeLinecap:'round',strokeLinejoin:'round'}, ROADS.map((r,i)=>h('path',{key:i,d:r.d}))));
+    const fs = 10*s;
+    if (labels) {
+      kids.push(h('g',{key:'sh'}, ROADS.map((r,i)=>{ const w=(r.n.length*5.6+8)*s;
+        return h('g',{key:i,transform:`translate(${r.at[0]},${r.at[1]})`},
+          h('rect',{x:-w/2,y:-7*s,width:w,height:14*s,rx:2*s,fill:T.casing,stroke:T.road,strokeWidth:1*s}),
+          h('text',{x:0,y:3.4*s,textAnchor:'middle',fontSize:9*s,fontWeight:600,fill:T.road,fontFamily:T.font},r.n)); })));
+      kids.push(h('g',{key:'lm'}, MARKS.map((m,i)=>h('g',{key:i},
+        h('rect',{x:m[1]-2.6*s,y:m[2]-2.6*s,width:5.2*s,height:5.2*s,fill:T.halo,stroke:T.text,strokeWidth:1.2*s}),
+        h('text',{x:m[1]+m[3]*7*s,y:m[2]+3.5*s,textAnchor:m[3]>0?'start':'end',fontSize:fs,fill:T.text,fontFamily:T.font,fontStyle:'italic',
+          stroke:T.halo,strokeWidth:3*s,paintOrder:'stroke',strokeLinejoin:'round'},m[0])))));
+    }
+    const lab = (x,y,t,c,anchor,key,bold) => h('text',{key,x,y,textAnchor:anchor||'start',fontSize:(bold?10.5:9.5)*s,fontWeight:bold?700:500,fill:c,fontFamily:T.font,stroke:T.halo,strokeWidth:3*s,paintOrder:'stroke',strokeLinejoin:'round'},t);
+    const drawTrail = (pts,col,kind,key) => {
+      const g2 = [], last = pts[12], first = pts[0];
+      if (ms==='comet') {
+        for (let i=0;i<12;i++) g2.push(h('line',{key:'s'+i,x1:pts[i][0],y1:pts[i][1],x2:pts[i+1][0],y2:pts[i+1][1],stroke:col,strokeWidth:(1+i*0.42)*s,strokeOpacity:0.25+i*0.06,strokeLinecap:'round'}));
+      } else {
+        g2.push(h('polyline',{key:'pl',points:pts.map(q=>q.join(',')).join(' '),fill:'none',stroke:T.halo,strokeWidth:4.5*s,strokeLinejoin:'round'}));
+        g2.push(h('polyline',{key:'pl2',points:pts.map(q=>q.join(',')).join(' '),fill:'none',stroke:col,strokeWidth:2*s,strokeLinejoin:'round',strokeDasharray:kind==='pop'&&ms==='dots'?`${3*s} ${2*s}`:'none'}));
+        if (ms==='dots') pts.slice(0,12).forEach((q,i)=>g2.push(h('circle',{key:'y'+i,cx:q[0],cy:q[1],r:2.1*s,fill:kind==='pop'?T.halo:col,stroke:col,strokeWidth:1*s})));
+        if (ms==='arrow') [3,7,11].forEach(i=>{ const a=pts[i],b=pts[i+1],ang=Math.atan2(b[1]-a[1],b[0]-a[0])*180/Math.PI;
+          g2.push(h('path',{key:'ar'+i,d:`M${-4*s},${-3.5*s} L${2.5*s},0 L${-4*s},${3.5*s}`,fill:'none',stroke:col,strokeWidth:1.8*s,transform:`translate(${(a[0]+b[0])/2},${(a[1]+b[1])/2}) rotate(${ang})`})); });
+      }
+      if (kind==='inc') {
+        g2.push(ms==='arrow' ? h('rect',{key:'mk',x:last[0]-5*s,y:last[1]-5*s,width:10*s,height:10*s,transform:`rotate(45 ${last[0]} ${last[1]})`,fill:col,stroke:T.halo,strokeWidth:2*s})
+                             : h('circle',{key:'mk',cx:last[0],cy:last[1],r:6*s,fill:col,stroke:T.halo,strokeWidth:2.2*s}));
+      } else {
+        g2.push(ms==='arrow' ? h('rect',{key:'mk',x:last[0]-5*s,y:last[1]-5*s,width:10*s,height:10*s,fill:T.halo,stroke:col,strokeWidth:2.6*s})
+                             : h('circle',{key:'mk',cx:last[0],cy:last[1],r:5.6*s,fill:T.halo,stroke:col,strokeWidth:2.8*s}));
+      }
+      const dx = kind==='inc' ? 9 : -9, an = kind==='inc' ? 'start' : 'end';
+      if (p.yearLabels ?? true) { g2.push(lab(first[0]+dx*s,first[1]+4*s,'2011',col,an,'l0')); }
+      if (p.endLabels ?? true) g2.push(lab(last[0]+dx*s,last[1]+(kind==='inc'?-4:10)*s,kind==='inc'?'Income center 2023':'Population center 2023',col,an,'l1',true));
+      if (ms==='comet' && kind==='inc') { const q=pts[6];
+        g2.push(h('circle',{key:'hq',cx:q[0],cy:q[1],r:3.2*s,fill:T.halo,stroke:col,strokeWidth:1.6*s}));
+        g2.push(lab(q[0]+7*s,q[1]+3*s,'2017',col,'start','hl')); }
+      return h('g',{key},g2);
+    };
+    if (p.centers ?? true) {
+      const a = G.inc[12], b = G.pop[12], mx=(a[0]+b[0])/2, my=(a[1]+b[1])/2;
+      kids.push(h('line',{key:'gap',x1:a[0],y1:a[1],x2:b[0],y2:b[1],stroke:T.gapBg,strokeWidth:1.4*s,strokeDasharray:`${2*s} ${2.5*s}`}));
+      kids.push(drawTrail(G.pop,T.pop,'pop','tp'));
+      kids.push(drawTrail(G.inc,T.inc,'inc','ti'));
+      const w = 44*s;
+      kids.push(h('g',{key:'gl',transform:`translate(${mx-36*s},${my-2*s})`},
+        h('rect',{x:-w/2,y:-8*s,width:w,height:16*s,fill:T.gapBg}),
+        h('text',{x:0,y:3.6*s,textAnchor:'middle',fontSize:9.5*s,fontWeight:700,fill:T.gapFg,fontFamily:T.font},'3.8 mi gap')));
+    }
+    const map = h('svg',{viewBox:crop.join(' '),preserveAspectRatio:'xMidYMid slice',style:{display:'block',width:'100%',height:'100%'}},kids);
+    return { map, land: T.land };
+  }
+}
+</script>
+</body>
+</html>

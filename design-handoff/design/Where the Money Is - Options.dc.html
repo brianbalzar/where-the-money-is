@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Public+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet">
+<style>body{margin:0;background:#f0eee9;font-family:system-ui,sans-serif}a{color:#0068CC;text-decoration:none}a:hover{text-decoration:underline}.dv-turn{padding:40px 44px 32px;border-bottom:1px solid rgba(0,0,0,.08);scroll-margin-top:16px}.dv-thd{display:flex;align-items:baseline;gap:10px;margin:0 0 8px}.dv-tid{font:600 10px ui-monospace,Menlo,monospace;padding:3px 7px;background:#1a1a1a;color:#fff;border-radius:4px;text-decoration:none}.dv-tname{font:600 13px/1.2 system-ui,sans-serif;color:#1a1a1a}.dv-group{font:600 11px/1.2 system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:rgba(0,0,0,.5);margin:48px 0 16px;padding-top:20px;border-top:1px solid rgba(0,0,0,.1)}.dv-gnote{font:13px/1.5 system-ui,sans-serif;color:rgba(0,0,0,.6);margin:-8px 0 18px;max-width:880px}.dv-opts{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start}.dv-opt{flex:none;display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px}.dv-oid{font:600 10.5px ui-monospace,Menlo,monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none}.dv-olabel{display:flex;align-items:baseline;gap:8px;font:400 11px/1.3 system-ui,sans-serif;color:rgba(0,0,0,.55)}.dv-card{max-width:100%;background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.06);overflow:hidden}.dv-opt:target .dv-oid{background:#2a78d6;color:#fff}.dv-next{margin:28px 0 0;font:12px/1.5 system-ui,sans-serif;color:rgba(0,0,0,.5)}</style>
+</helmet>
+<section class="dv-turn" id="t2">
+<div class="dv-thd"><a class="dv-tid" href="#t2">2</a><span class="dv-tname">Riffs on <a class="dv-oid" href="#1a">1a</a>: same tokens (Inter + Source Serif 4, black/blue/green, square corners, hairlines), new layouts and components</span></div>
+
+<div class="dv-group">Desktop layouts</div>
+<div class="dv-opts">
+
+<div class="dv-opt" id="2a"><div class="dv-olabel"><a class="dv-oid" href="#2a">2a</a>Right panel · finding in an inverted black band over the map</div>
+<div class="dv-card" style="width:1280px;height:800px;display:grid;grid-template-columns:minmax(0,1fr) 372px;font-family:Inter,sans-serif;background:#fff;border-radius:0">
+  <div style="display:grid;grid-template-rows:auto minmax(0,1fr);min-height:0">
+    <div style="background:#000;color:#fff;padding:22px 28px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:32px;align-items:end">
+      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#C9C7C2">Dallas–Fort Worth · 2011 to 2023</span><p style="margin:0;font-family:'Source Serif 4',serif;font-size:24px;line-height:1.3;text-wrap:pretty">{{ finding }}</p></div>
+      <div style="display:flex;gap:24px">
+        <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:11px;color:#C9C7C2">Gap 2011</span><span style="font-family:'Source Serif 4',serif;font-size:30px;font-weight:600">{{ gap0 }}</span></div>
+        <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:11px;color:#C9C7C2">Gap 2023</span><span style="font-family:'Source Serif 4',serif;font-size:30px;font-weight:600;color:#5CACFF">{{ gap1 }}</span></div>
+      </div>
+    </div>
+    <div style="position:relative;overflow:hidden">
+      <dc-import name="MapSchematic" variant="a" px="908" style="position:absolute;inset:0" hint-size="100%,100%"></dc-import>
+      <div style="position:absolute;left:20px;right:20px;bottom:20px;background:#fff;border:1px solid #C9C7C2;padding:12px 16px;display:grid;grid-template-columns:40px 64px minmax(0,1fr);gap:16px;align-items:center">
+        <div style="width:40px;height:40px;background:#000;display:flex;align-items:center;justify-content:center"><span style="width:0;height:0;border-left:11px solid #fff;border-top:7px solid transparent;border-bottom:7px solid transparent;margin-left:3px"></span></div>
+        <div style="font-family:'Source Serif 4',serif;font-size:28px;font-weight:600">2023</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="position:relative;height:16px"><div style="position:absolute;left:0;right:0;top:7px;height:2px;background:#000"></div><div style="position:absolute;inset:0;display:flex;justify-content:space-between"><sc-for list="{{ years }}" as="y" hint-placeholder-count="13"><span style="width:1px;height:16px;background:#6E6C68"></span></sc-for></div><div style="position:absolute;right:-7px;top:1px;width:14px;height:14px;background:#000;border:2px solid #fff;box-shadow:0 0 0 1px #000"></div></div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:#4A4845"><span>2011</span><span>2014</span><span>2017</span><span>2020</span><span>2023</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <aside style="border-left:1px solid #E2E1DE;display:flex;flex-direction:column;min-height:0">
+    <div style="padding:20px 22px;border-bottom:1px solid #E2E1DE;display:flex;flex-direction:column;gap:10px">
+      <div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#4A4845">Where the money is</div>
+      <div style="display:flex;gap:6px"><div style="flex:1;border:1px solid #000;padding:10px 12px;font-size:14px;font-weight:600">Dallas–Fort Worth–Arlington, TX</div><div style="width:38px;border:1px solid #C9C7C2;display:flex;align-items:center;justify-content:center"><span style="width:7px;height:7px;border-left:1.5px solid #000;border-bottom:1.5px solid #000;transform:rotate(45deg) translateX(2px)"></span></div><div style="width:38px;border:1px solid #C9C7C2;display:flex;align-items:center;justify-content:center"><span style="width:7px;height:7px;border-right:1.5px solid #000;border-top:1.5px solid #000;transform:rotate(45deg) translateX(-2px)"></span></div></div>
+    </div>
+    <div style="padding:18px 22px;border-bottom:1px solid #E2E1DE;display:flex;flex-direction:column;gap:0">
+      <div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#4A4845;margin-bottom:10px">Map measure</div>
+      <div style="display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-top:1px solid #000"><span style="width:14px;height:14px;border-radius:50%;border:4px solid #000;box-sizing:border-box;flex:none;margin-top:2px"></span><div><div style="font-size:14px;font-weight:600">Average income per return</div><div style="font-size:12px;color:#6E6C68">Total income ÷ returns, 2023 dollars</div></div></div>
+      <div style="display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-top:1px solid #E2E1DE"><span style="width:14px;height:14px;border-radius:50%;border:1.5px solid #9C9A95;box-sizing:border-box;flex:none;margin-top:2px"></span><div><div style="font-size:14px;font-weight:600">Wealth signal</div><div style="font-size:12px;color:#6E6C68">Capital income per return. A proxy, not net worth.</div></div></div>
+      <div style="display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-top:1px solid #E2E1DE"><span style="width:14px;height:14px;border-radius:50%;border:1.5px solid #9C9A95;box-sizing:border-box;flex:none;margin-top:2px"></span><div><div style="font-size:14px;font-weight:600">Share of returns over $200K</div><div style="font-size:12px;color:#6E6C68">Percent of returns in the top IRS income class</div></div></div>
+    </div>
+    <div style="padding:18px 22px;border-bottom:1px solid #E2E1DE;display:flex;flex-direction:column;gap:10px">
+      <div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#4A4845">Legend</div>
+      <div style="display:flex;gap:2px"><sc-for list="{{ binsA }}" as="b" hint-placeholder-count="6"><div style="flex:1;display:flex;flex-direction:column;gap:4px"><div style="height:12px;background:{{ b.c }};opacity:.85"></div><div style="font-size:10px;color:#4A4845">{{ b.lo }}</div></div></sc-for><div style="width:8px"></div><div style="flex:1;display:flex;flex-direction:column;gap:4px"><div style="height:12px;background:#061f3d;outline:1px solid #fff;outline-offset:-2px"></div><div style="font-size:10px;color:#4A4845">$190K+</div></div><div style="width:8px"></div><div style="flex:1;display:flex;flex-direction:column;gap:4px"><div style="height:12px;border:1px solid #b9b7b2;box-sizing:border-box;background:repeating-linear-gradient(45deg,#f4f4f2 0 3px,#b9b7b2 3px 4px)"></div><div style="font-size:10px;color:#4A4845">No data</div></div></div>
+      <div style="font-size:11px;line-height:1.5;color:#4A4845"><strong style="color:#000">Outliers:</strong> Highland Park, Southlake, Preston Hollow +4</div>
+      <div style="display:flex;flex-direction:column;gap:7px;font-size:13px;color:#2D2C2A;padding-top:8px;border-top:1px solid #EFEEEC">
+        <span style="display:flex;align-items:center;gap:8px"><span style="width:12px;height:12px;border-radius:50%;background:#000"></span>Income center</span>
+        <span style="display:flex;align-items:center;gap:8px"><span style="width:8px;height:8px;border-radius:50%;border:2.5px solid #009500"></span>Population center (by returns)</span>
+        <span style="display:flex;align-items:center;gap:8px;color:#6E6C68"><span style="width:10px;height:10px;border:1px solid #9C9A95"></span>Above-average income center</span>
+      </div>
+    </div>
+    <div style="padding:16px 22px;display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#4A4845">Selected ZIP</span><span style="font-size:12px;color:#6E6C68">Click the map to pin</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:15px;font-weight:700">75024 <span style="font-weight:400;color:#4A4845;font-size:13px">Plano (west)</span></span><span style="font-family:'Source Serif 4',serif;font-size:22px;font-weight:600">$158K</span></div>
+      <div style="position:relative;height:30px">{{ sparkA }}</div>
+      <div style="display:flex;gap:16px;font-size:12px;color:#4A4845"><span>Rank <strong style="color:#000">38 of 238</strong></span><span>Returns <strong style="color:#000">21,340</strong></span></div>
+    </div>
+    <div style="margin-top:auto;padding:12px 22px;border-top:1px solid #E2E1DE;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;display:flex;justify-content:space-between"><a href="#1y" style="color:#0082FF">Year-by-year table</a><a href="#notes" style="color:#0082FF">Methodology</a></div>
+  </aside>
+</div></div>
+
+<div class="dv-opt" id="2b"><div class="dv-olabel"><a class="dv-oid" href="#2b">2b</a>Story-first · headline row across the top, gap chart as the year control</div>
+<div class="dv-card" style="width:1280px;height:800px;display:grid;grid-template-rows:60px auto minmax(0,1fr);font-family:Inter,sans-serif;background:#fff;border-radius:0">
+  <header style="display:flex;align-items:center;gap:20px;padding:0 28px;border-bottom:1px solid #E2E1DE">
+    <span style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#000">Where the money is</span>
+    <div style="display:flex;gap:6px;align-items:stretch"><div style="border:1px solid #000;padding:8px 12px;font-size:14px;font-weight:600;display:flex;gap:28px;align-items:center">Dallas–Fort Worth–Arlington, TX<span style="width:6px;height:6px;border-right:1.5px solid #000;border-bottom:1.5px solid #000;transform:rotate(45deg) translateY(-2px)"></span></div><div style="width:36px;border:1px solid #C9C7C2;display:flex;align-items:center;justify-content:center"><span style="width:7px;height:7px;border-left:1.5px solid #000;border-bottom:1.5px solid #000;transform:rotate(45deg) translateX(2px)"></span></div><div style="width:36px;border:1px solid #C9C7C2;display:flex;align-items:center;justify-content:center"><span style="width:7px;height:7px;border-right:1.5px solid #000;border-top:1.5px solid #000;transform:rotate(45deg) translateX(-2px)"></span></div></div>
+    <div style="flex:1"></div>
+    <div style="display:flex;gap:22px;font-size:13px;font-weight:600">
+      <span style="padding:6px 0;border-bottom:2px solid #000">Avg income</span>
+      <span style="padding:6px 0;color:#6E6C68;border-bottom:2px solid transparent">Wealth signal</span>
+      <span style="padding:6px 0;color:#6E6C68;border-bottom:2px solid transparent">Share $200K+</span>
+    </div>
+    <span style="font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#0082FF">About the data</span>
+  </header>
+  <div style="display:grid;grid-template-columns:minmax(0,1fr) 520px;gap:40px;padding:24px 28px;border-bottom:1px solid #E2E1DE;align-items:end">
+    <p style="margin:0;font-family:'Source Serif 4',serif;font-size:30px;line-height:1.22;letter-spacing:-.01em;color:#000;text-wrap:balance">{{ finding }}</p>
+    <div style="display:flex;flex-direction:column;gap:4px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#4A4845">Gap between centers, miles</span><span style="font-size:12px;color:#4A4845">2017 · <strong style="color:#000">{{ gap1 }} mi in 2023</strong></span></div>
+      <div style="display:grid;grid-template-columns:36px minmax(0,1fr);gap:14px;align-items:center">
+        <div style="width:36px;height:36px;background:#000;display:flex;align-items:center;justify-content:center"><span style="width:0;height:0;border-left:10px solid #fff;border-top:6px solid transparent;border-bottom:6px solid transparent;margin-left:3px"></span></div>
+        <div style="position:relative;height:62px">{{ gapSparkA }}</div>
+      </div>
+    </div>
+  </div>
+  <div style="position:relative;overflow:hidden">
+    <dc-import name="MapSchematic" variant="a" px="1280" style="position:absolute;inset:0" hint-size="100%,100%"></dc-import>
+    <div style="position:absolute;left:24px;bottom:24px;width:320px;background:#fff;border:1px solid #C9C7C2;padding:14px 16px;display:flex;flex-direction:column;gap:8px">
+      <div style="font-size:12px;font-weight:600">Avg income per return, 2017</div>
+      <div style="position:relative;height:30px">
+        <sc-for list="{{ ticksA }}" as="t" hint-placeholder-count="0"><span style="position:absolute;left:{{ t.x }};top:0;width:1.5px;height:18px;background:{{ t.c }}"></span></sc-for>
+        <span style="position:absolute;left:79.5%;top:2px;font-size:12px;color:#6E6C68">//</span>
+        <div style="position:absolute;left:0;right:0;top:22px;height:6px;display:flex;gap:1px"><sc-for list="{{ binSpansA }}" as="b" hint-placeholder-count="6"><span style="width:{{ b.w }};background:{{ b.c }}"></span></sc-for><span style="width:4%"></span><span style="flex:1;background:#061f3d"></span></div>
+      </div>
+      <div style="position:relative;height:12px;font-size:10px;color:#4A4845"><sc-for list="{{ binSpansA }}" as="b" hint-placeholder-count="6"><span style="position:absolute;left:{{ b.x }}">{{ b.lo }}</span></sc-for><span style="position:absolute;left:84%">190K+</span></div>
+      <div style="display:flex;gap:14px;font-size:11px;color:#4A4845;align-items:center;padding-top:6px;border-top:1px solid #EFEEEC"><span style="display:flex;gap:6px;align-items:center"><span style="width:14px;height:10px;background:repeating-linear-gradient(45deg,#f4f4f2 0 3px,#b9b7b2 3px 4px);border:1px solid #b9b7b2"></span>No data</span><span style="display:flex;gap:6px;align-items:center"><span style="width:10px;height:10px;border-radius:50%;background:#000"></span>Income</span><span style="display:flex;gap:6px;align-items:center"><span style="width:6px;height:6px;border-radius:50%;border:2px solid #009500"></span>Population</span></div>
+    </div>
+    <div style="position:absolute;top:20px;right:20px;display:flex;flex-direction:column;border:1px solid #C9C7C2;background:#fff"><div style="width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:18px;border-bottom:1px solid #E2E1DE">+</div><div style="width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:18px">−</div></div>
+  </div>
+</div></div>
+
+<div class="dv-opt" id="2c"><div class="dv-olabel"><a class="dv-oid" href="#2c">2c</a><a class="dv-oid" href="#1a">1a</a> in dark theme · ramp flips to dark-to-light</div>
+<div class="dv-card" style="width:1280px;height:800px;display:grid;grid-template-columns:392px minmax(0,1fr);font-family:Inter,sans-serif;background:#000;color:#fff;border-radius:0;border-color:#2D2C2A">
+  <aside style="border-right:1px solid #2D2C2A;display:flex;flex-direction:column;min-height:0">
+    <div style="padding:24px 24px 20px;border-bottom:1px solid #2D2C2A;display:flex;flex-direction:column;gap:14px">
+      <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#C9C7C2">Where the money is</span><div style="display:flex;border:1px solid #4A4845;font-size:11px;font-weight:600"><span style="padding:4px 8px;color:#9C9A95">Light</span><span style="padding:4px 8px;background:#fff;color:#000">Dark</span></div></div>
+      <div style="display:flex;gap:6px"><div style="flex:1;border:1px solid #fff;padding:10px 12px;font-size:15px;font-weight:600">Dallas–Fort Worth–Arlington, TX</div><div style="width:40px;border:1px solid #4A4845;display:flex;align-items:center;justify-content:center"><span style="width:7px;height:7px;border-left:1.5px solid #fff;border-bottom:1.5px solid #fff;transform:rotate(45deg) translateX(2px)"></span></div><div style="width:40px;border:1px solid #4A4845;display:flex;align-items:center;justify-content:center"><span style="width:7px;height:7px;border-right:1.5px solid #fff;border-top:1.5px solid #fff;transform:rotate(45deg) translateX(-2px)"></span></div></div>
+    </div>
+    <div style="padding:22px 24px;border-bottom:1px solid #2D2C2A;display:flex;flex-direction:column;gap:12px">
+      <p style="margin:0;font-family:'Source Serif 4',serif;font-size:22px;line-height:1.3;color:#fff;text-wrap:pretty">{{ finding }}</p>
+      <div style="display:flex;gap:20px;font-size:12px;color:#C9C7C2"><span>Gap 2011 <strong style="color:#fff">{{ gap0 }} mi</strong></span><span>Gap 2023 <strong style="color:#5CACFF">{{ gap1 }} mi</strong></span></div>
+    </div>
+    <div style="padding:18px 24px;border-bottom:1px solid #2D2C2A;display:flex;flex-direction:column;gap:14px">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border:1px solid #fff">
+        <div style="background:#fff;color:#000;font-size:12px;font-weight:600;padding:8px 6px;text-align:center">Avg income</div>
+        <div style="font-size:12px;font-weight:600;padding:8px 6px;text-align:center;border-left:1px solid #fff">Wealth signal</div>
+        <div style="font-size:12px;font-weight:600;padding:8px 6px;text-align:center;border-left:1px solid #fff">Share $200K+</div>
+      </div>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:#E2E1DE">
+        <span style="display:flex;align-items:center;gap:7px"><span style="width:12px;height:12px;border-radius:50%;background:#fff"></span>Income center</span>
+        <span style="display:flex;align-items:center;gap:7px"><span style="width:8px;height:8px;border-radius:50%;border:2.5px solid #5CB85C"></span>Population center</span>
+      </div>
+    </div>
+    <div style="padding:18px 24px;display:flex;flex-direction:column;gap:10px">
+      <div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#C9C7C2">Avg income per return, 2023</div>
+      <div style="display:flex;gap:2px"><sc-for list="{{ binsAD }}" as="b" hint-placeholder-count="6"><div style="flex:1;display:flex;flex-direction:column;gap:4px"><div style="height:12px;background:{{ b.c }}"></div><div style="font-size:10px;color:#C9C7C2">{{ b.lo }}</div></div></sc-for><div style="width:10px"></div><div style="flex:1;display:flex;flex-direction:column;gap:4px"><div style="height:12px;background:#f2f8ff;outline:1px solid #000;outline-offset:-2px"></div><div style="font-size:10px;color:#C9C7C2">$190K+</div></div><div style="width:10px"></div><div style="flex:1;display:flex;flex-direction:column;gap:4px"><div style="height:12px;border:1px solid #4A4845;box-sizing:border-box;background:repeating-linear-gradient(45deg,#111110 0 3px,#4A4845 3px 4px)"></div><div style="font-size:10px;color:#C9C7C2">No data</div></div></div>
+      <div style="font-size:11px;line-height:1.5;color:#C9C7C2">Dark basemap: the lowest bin is darkest, so high-income ZIPs glow. The outlier bin turns near-white.</div>
+    </div>
+    <div style="margin-top:auto;padding:12px 24px;border-top:1px solid #2D2C2A;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;display:flex;justify-content:space-between"><a href="#1y" style="color:#5CACFF">Year-by-year table</a><a href="#notes" style="color:#5CACFF">Methodology</a></div>
+  </aside>
+  <div style="position:relative;overflow:hidden">
+    <dc-import name="MapSchematic" variant="ad" px="1143" style="position:absolute;inset:0" hint-size="100%,100%"></dc-import>
+    <div style="position:absolute;left:24px;right:24px;bottom:24px;background:#000;border:1px solid #4A4845;padding:14px 18px;display:grid;grid-template-columns:40px 72px minmax(0,1fr);gap:18px;align-items:center">
+      <div style="width:40px;height:40px;background:#fff;display:flex;align-items:center;justify-content:center"><span style="width:0;height:0;border-left:11px solid #000;border-top:7px solid transparent;border-bottom:7px solid transparent;margin-left:3px"></span></div>
+      <div style="font-family:'Source Serif 4',serif;font-size:30px;font-weight:600">2023</div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div style="position:relative;height:16px"><div style="position:absolute;left:0;right:0;top:7px;height:2px;background:#fff"></div><div style="position:absolute;inset:0;display:flex;justify-content:space-between"><sc-for list="{{ years }}" as="y" hint-placeholder-count="13"><span style="width:1px;height:16px;background:#9C9A95"></span></sc-for></div><div style="position:absolute;right:-7px;top:1px;width:14px;height:14px;background:#fff;border:2px solid #000;box-shadow:0 0 0 1px #fff"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:#C9C7C2"><span>2011</span><span>2014</span><span>2017</span><span>2020</span><span>2023</span></div>
+      </div>
+    </div>
+  </div>
+</div></div>
+</div>
+
+<div class="dv-group">Mobile (390 px)</div>
+<div class="dv-opts">
+<div class="dv-opt" id="2d"><div class="dv-olabel"><a class="dv-oid" href="#2d">2d</a>Stacked scroll page in <a class="dv-oid" href="#1a">1a</a> style</div>
+<div class="dv-card" style="width:390px;font-family:Inter,sans-serif;background:#fff;border-radius:0">
+  <div style="padding:14px 16px;display:flex;gap:6px;border-bottom:1px solid #E2E1DE">
+    <div style="flex:1;border:1px solid #000;padding:11px 12px;font-size:14px;font-weight:600">Dallas–Fort Worth</div>
+    <div style="width:44px;border:1px solid #C9C7C2;display:flex;align-items:center;justify-content:center"><span style="width:7px;height:7px;border-left:1.5px solid #000;border-bottom:1.5px solid #000;transform:rotate(45deg) translateX(2px)"></span></div>
+    <div style="width:44px;border:1px solid #C9C7C2;display:flex;align-items:center;justify-content:center"><span style="width:7px;height:7px;border-right:1.5px solid #000;border-top:1.5px solid #000;transform:rotate(45deg) translateX(-2px)"></span></div>
+  </div>
+  <div style="background:#000;color:#fff;padding:18px 16px;display:flex;flex-direction:column;gap:10px">
+    <p style="margin:0;font-family:'Source Serif 4',serif;font-size:20px;line-height:1.3">{{ finding }}</p>
+  </div>
+  <div style="position:relative;height:380px"><dc-import name="MapSchematic" variant="a" crop="square" px="429" style="position:absolute;inset:0" hint-size="100%,100%"></dc-import></div>
+  <div style="padding:12px 16px;border-top:1px solid #E2E1DE;border-bottom:1px solid #E2E1DE;display:grid;grid-template-columns:44px minmax(0,1fr);gap:12px;align-items:center">
+    <div style="width:44px;height:44px;background:#000;display:flex;align-items:center;justify-content:center"><span style="width:0;height:0;border-left:11px solid #fff;border-top:7px solid transparent;border-bottom:7px solid transparent;margin-left:3px"></span></div>
+    <div style="position:relative;height:56px">{{ gapSparkA12 }}</div>
+  </div>
+  <div style="padding:16px;display:flex;flex-direction:column;gap:16px">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border:1px solid #000">
+      <div style="background:#000;color:#fff;font-size:12px;font-weight:600;padding:13px 4px;text-align:center">Avg income</div>
+      <div style="font-size:12px;font-weight:600;padding:13px 4px;text-align:center;border-left:1px solid #000">Wealth</div>
+      <div style="font-size:12px;font-weight:600;padding:13px 4px;text-align:center;border-left:1px solid #000">$200K+</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:4px">
+      <div style="display:flex;gap:2px"><sc-for list="{{ binsA }}" as="b" hint-placeholder-count="6"><span style="flex:1;height:14px;background:{{ b.c }}"></span></sc-for><span style="width:8px"></span><span style="flex:1;height:14px;background:#061f3d"></span><span style="width:8px"></span><span style="flex:1;height:14px;background:repeating-linear-gradient(45deg,#f4f4f2 0 3px,#b9b7b2 3px 4px);border:1px solid #b9b7b2;box-sizing:border-box"></span></div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:#4A4845"><span>$36K</span><span>$92K</span><span>$190K+</span><span>No data</span></div>
+    </div>
+    <div style="display:flex;flex-direction:column">
+      <div style="display:grid;grid-template-columns:48px 1fr 1fr 52px;font-size:11px;color:#6E6C68;padding-bottom:6px;border-bottom:1px solid #000"><span>Year</span><span>Income</span><span>Pop.</span><span style="text-align:right">Gap</span></div>
+      <sc-for list="{{ rowsShort }}" as="r" hint-placeholder-count="5"><div style="display:grid;grid-template-columns:48px 1fr 1fr 52px;font-size:13px;padding:8px 0;border-bottom:1px solid #EFEEEC;font-variant-numeric:tabular-nums"><strong>{{ r.year }}</strong><span>{{ r.im }}</span><span>{{ r.pm }}</span><strong style="text-align:right">{{ r.gap }}</strong></div></sc-for>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase"><span style="color:#0082FF">All 13 years</span><span style="color:#0082FF">Methodology</span></div>
+  </div>
+</div></div>
+
+<div class="dv-opt" id="2e"><div class="dv-olabel"><a class="dv-oid" href="#2e">2e</a>Bottom sheet, expanded state (pairs with <a class="dv-oid" href="#1d">1d</a> peek)</div>
+<div class="dv-card" style="width:390px;height:844px;position:relative;font-family:Inter,sans-serif;background:#fff;border-radius:0;overflow:hidden">
+  <div style="position:absolute;left:0;right:0;top:0;height:200px;overflow:hidden"><dc-import name="MapSchematic" variant="a" crop="square" px="524" labels="{{ false }}" style="position:absolute;inset:0" hint-size="100%,100%"></dc-import></div>
+  <div style="position:absolute;left:0;right:0;top:150px;bottom:0;background:#fff;border-top:1px solid #C9C7C2;box-shadow:0 -8px 28px rgba(0,0,0,.10);padding:8px 16px 16px;display:flex;flex-direction:column;gap:14px;overflow:hidden">
+    <div style="align-self:center;width:36px;height:4px;background:#C9C7C2"></div>
+    <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#4A4845">Dallas–Fort Worth</span><span style="font-size:12px;font-weight:700;color:#0082FF;text-transform:uppercase;letter-spacing:.06em">Map</span></div>
+    <p style="margin:0;font-family:'Source Serif 4',serif;font-size:18px;line-height:1.35">{{ finding }}</p>
+    <div style="display:flex;flex-direction:column;gap:6px;padding-top:12px;border-top:1px solid #E2E1DE">
+      <div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#4A4845">Avg income per return, 2023</div>
+      <sc-for list="{{ binsArev }}" as="b" hint-placeholder-count="6"><div style="display:flex;gap:10px;align-items:center;font-size:13px;font-variant-numeric:tabular-nums"><span style="width:24px;height:14px;background:{{ b.c }}"></span><span>{{ b.range }}</span><span style="margin-left:auto;color:#6E6C68">{{ b.n }} ZIPs</span></div></sc-for>
+      <div style="display:flex;gap:10px;align-items:center;font-size:13px"><span style="width:24px;height:14px;background:#061f3d"></span><strong>$190K+</strong><span style="color:#4A4845;font-size:12px">Highland Park, Southlake +5</span></div>
+      <div style="display:flex;gap:10px;align-items:center;font-size:13px"><span style="width:24px;height:14px;background:repeating-linear-gradient(45deg,#f4f4f2 0 3px,#b9b7b2 3px 4px);border:1px solid #b9b7b2;box-sizing:border-box"></span>No data<span style="margin-left:auto;color:#6E6C68">9 ZIPs</span></div>
+    </div>
+    <div style="display:flex;flex-direction:column;padding-top:12px;border-top:1px solid #E2E1DE">
+      <div style="display:grid;grid-template-columns:48px 1fr 1fr 52px;font-size:11px;color:#6E6C68;padding-bottom:6px;border-bottom:1px solid #000"><span>Year</span><span>Income</span><span>Pop.</span><span style="text-align:right">Gap</span></div>
+      <sc-for list="{{ rowsShort }}" as="r" hint-placeholder-count="5"><div style="display:grid;grid-template-columns:48px 1fr 1fr 52px;font-size:13px;padding:8px 0;border-bottom:1px solid #EFEEEC;font-variant-numeric:tabular-nums"><strong>{{ r.year }}</strong><span>{{ r.im }}</span><span>{{ r.pm }}</span><strong style="text-align:right">{{ r.gap }}</strong></div></sc-for>
+    </div>
+  </div>
+</div></div>
+</div>
+
+<div class="dv-group">Components in <a class="dv-oid" href="#1a">1a</a> style</div>
+<p class="dv-gnote">These take ideas from <a class="dv-oid" href="#1b">1b</a> and <a class="dv-oid" href="#1c">1c</a> and redraw them in 1a tokens.</p>
+<div class="dv-opts">
+<div class="dv-opt" id="2f"><div class="dv-olabel"><a class="dv-oid" href="#2f">2f</a>Gap chart as year control (from <a class="dv-oid" href="#1v">1v</a>), scrubbed to 2017</div>
+<div class="dv-card" style="width:560px;padding:16px 18px;display:grid;grid-template-columns:40px 96px minmax(0,1fr);gap:16px;align-items:center;font-family:Inter,sans-serif;border-radius:0">
+  <div style="width:40px;height:40px;background:#000;display:flex;align-items:center;justify-content:center"><span style="width:0;height:0;border-left:11px solid #fff;border-top:7px solid transparent;border-bottom:7px solid transparent;margin-left:3px"></span></div>
+  <div style="display:flex;flex-direction:column;gap:2px"><span style="font-family:'Source Serif 4',serif;font-size:30px;font-weight:600;line-height:1">2017</span><span style="font-size:11px;color:#4A4845">gap 3.0 mi</span></div>
+  <div style="position:relative;height:62px">{{ gapSparkA }}</div>
+</div>
+<div style="width:560px;font:11px/1.5 Inter,sans-serif;color:#4A4845">Blue thumb = the one use of brand blue in the control. Dragging anywhere on the chart sets the year; the area fill stays at 6% black.</div></div>
+
+<div class="dv-opt" id="2g"><div class="dv-olabel"><a class="dv-oid" href="#2g">2g</a>Pinned ZIP card with metro average (from <a class="dv-oid" href="#1x">1x</a>) + suppressed state</div>
+<div style="display:flex;gap:16px;align-items:flex-start">
+<div class="dv-card" style="width:280px;padding:16px;display:flex;flex-direction:column;gap:10px;font-family:Inter,sans-serif;border:1px solid #000;border-radius:0">
+  <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:15px;font-weight:700">75024 <span style="font-weight:400;font-size:13px;color:#4A4845">Plano (west)</span></span><span style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#0082FF">Unpin</span></div>
+  <div style="display:flex;align-items:baseline;gap:10px"><span style="font-family:'Source Serif 4',serif;font-size:34px;font-weight:600;line-height:1">$158K</span><span style="display:flex;align-items:center;gap:5px;font-size:12px;color:#4A4845"><span style="width:12px;height:12px;background:#2f78c6"></span>bin 5 of 6</span></div>
+  <div style="font-size:12px;color:#4A4845">Avg income per return, 2023 · 34% above metro average ($118K)</div>
+  <div style="position:relative;height:56px;border-bottom:1px solid #E2E1DE">{{ sparkAC }}</div>
+  <div style="display:flex;justify-content:space-between;font-size:11px;color:#6E6C68"><span>2011</span><span>dashed: metro avg</span><span>2023</span></div>
+  <div style="display:grid;grid-template-columns:1fr auto;gap:4px 12px;font-size:12px;border-top:1px solid #E2E1DE;padding-top:10px"><span style="color:#4A4845">Rank in metro</span><strong>38 of 238</strong><span style="color:#4A4845">Tax returns</span><strong>21,340</strong><span style="color:#4A4845">Change since 2011</span><strong>+19.7%</strong></div>
+</div>
+<div class="dv-card" style="width:220px;padding:16px;display:flex;flex-direction:column;gap:8px;font-family:Inter,sans-serif;border:1px solid #000;border-radius:0">
+  <span style="font-size:15px;font-weight:700">75261 <span style="font-weight:400;font-size:13px;color:#4A4845">DFW Airport</span></span>
+  <div style="display:flex;align-items:center;gap:8px"><span style="width:22px;height:16px;background:repeating-linear-gradient(45deg,#f4f4f2 0 3px,#b9b7b2 3px 4px);border:1px solid #b9b7b2;box-sizing:border-box"></span><span style="font-family:'Source Serif 4',serif;font-size:22px;font-weight:600">No data</span></div>
+  <span style="font-size:12px;line-height:1.5;color:#4A4845">The IRS withholds values for ZIPs with fewer than about 100 returns. This ZIP had 60 in 2023. It is excluded from ranks and centers.</span>
+</div>
+</div></div>
+
+<div class="dv-opt" id="2h"><div class="dv-olabel"><a class="dv-oid" href="#2h">2h</a>Comet trail (from <a class="dv-oid" href="#1t">1t</a>) in 1a palette</div>
+<div class="dv-card" style="width:300px;height:280px;position:relative;border-radius:0"><dc-import name="MapSchematic" variant="a" crop="centers" px="301" marker-style="comet" style="position:absolute;inset:0" hint-size="100%,100%"></dc-import></div>
+<div style="width:300px;font:11px/1.5 Inter,sans-serif;color:#4A4845">Black and green keep identity; trail width shows time. Compare with <a class="dv-oid" href="#1r">1r</a> and <a class="dv-oid" href="#1s">1s</a>, already in this palette.</div></div>
+
+<div class="dv-opt" id="2i"><div class="dv-olabel"><a class="dv-oid" href="#2i">2i</a>Jump grid for all 50 metros (from <a class="dv-oid" href="#1ab">1ab</a>)</div>
+<div class="dv-card" style="width:640px;padding:16px;display:flex;flex-direction:column;gap:12px;font-family:Inter,sans-serif;border:1px solid #000;border-radius:0">
+  <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#4A4845">50 largest metros, by population</span><span style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase">Close</span></div>
+  <div style="border:1px solid #000;padding:10px 12px;font-size:14px;color:#9C9A95">Search by metro, city or state</div>
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:1px 12px"><sc-for list="{{ metrosA }}" as="m" hint-placeholder-count="50"><span style="font-size:12px;padding:5px 6px;background:{{ m.bg }};color:{{ m.fg }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-bottom:1px solid #EFEEEC"><span style="opacity:.55;font-variant-numeric:tabular-nums;margin-right:6px">{{ m.rank }}</span>{{ m.name }}</span></sc-for></div>
+</div></div>
+</div>
+
+<p class="dv-next">Try next: "<a class="dv-oid" href="#2b">2b</a> layout with the <a class="dv-oid" href="#2a">2a</a> measure list" · "use <a class="dv-oid" href="#2e">2e</a> + <a class="dv-oid" href="#1d">1d</a> for mobile" · "build the pick as a working prototype"</p>
+</section>
+<section class="dv-turn" id="t1">
+<div class="dv-thd"><a class="dv-tid" href="#t1">1</a><span class="dv-tname">Where the Money Is — options for every deliverable type (DFW, placeholder numbers)</span></div>
+<p class="dv-gnote" style="margin:0 0 0">Maps are schematic: hexagons stand in for ZCTA polygons and road geometry is approximate. All values are placeholders. Styles, layouts and components are independent choices, so any direction can take any legend, marker or slider below.</p>
+
+<div class="dv-group">Visual direction + desktop layout</div>
+<p class="dv-gnote">Three token systems, each shown on a different desktop layout. <a class="dv-oid" href="#1a">1a</a> derives from the attached Upchurch system (Inter + Source Serif, black/blue, square corners). <a class="dv-oid" href="#1b">1b</a> and <a class="dv-oid" href="#1c">1c</a> are new systems.</p>
+<div class="dv-opts">
+
+<div class="dv-opt" id="1a"><div class="dv-olabel"><a class="dv-oid" href="#1a">1a</a>Annual report · left panel · light</div>
+<div class="dv-card" style="width:1280px;height:800px;display:grid;grid-template-columns:392px minmax(0,1fr);font-family:Inter,sans-serif;background:#fff;border-radius:0">
+  <aside style="border-right:1px solid #E2E1DE;display:flex;flex-direction:column;min-height:0">
+    <div style="padding:24px 24px 20px;border-bottom:1px solid #E2E1DE;display:flex;flex-direction:column;gap:14px">
+      <div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#4A4845">Where the money is</div>
+      <div style="display:flex;gap:6px;align-items:stretch">
+        <div style="flex:1;display:flex;align-items:center;justify-content:space-between;border:1px solid #000;padding:10px 12px;font-size:15px;font-weight:600;color:#000">Dallas–Fort Worth–Arlington, TX<span style="width:7px;height:7px;border-right:1.5px solid #000;border-bottom:1.5px solid #000;transform:rotate(45deg) translateY(-3px)"></span></div>
+        <div style="width:40px;border:1px solid #C9C7C2;display:flex;align-items:center;justify-content:center"><span style="width:7px;height:7px;border-left:1.5px solid #000;border-bottom:1.5px solid #000;transform:rotate(45deg) translateX(2px)"></span></div>
+        <div style="width:40px;border:1px solid #C9C7C2;display:flex;align-items:center;justify-content:center"><span style="width:7px;height:7px;border-right:1.5px solid #000;border-top:1.5px solid #000;transform:rotate(45deg) translateX(-2px)"></span></div>
+      </div>
+      <div style="font-size:12px;color:#6E6C68">Rank 4 of 50 by population · 247 ZIPs · 9 suppressed</div>
+    </div>
+    <div style="padding:22px 24px;display:flex;flex-direction:column;gap:12px;border-bottom:1px solid #E2E1DE">
+      <p style="margin:0;font-family:'Source Serif 4',serif;font-size:22px;line-height:1.3;color:#000;text-wrap:pretty">{{ finding }}</p>
+      <div style="display:flex;gap:20px;font-size:12px;color:#4A4845"><span>Gap 2011 <strong style="color:#000">{{ gap0 }} mi</strong></span><span>Gap 2023 <strong style="color:#000">{{ gap1 }} mi</strong></span></div>
+    </div>
+    <div style="padding:18px 24px;display:flex;flex-direction:column;gap:14px;border-bottom:1px solid #E2E1DE">
+      <div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#4A4845">Map measure</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border:1px solid #000">
+        <div style="background:#000;color:#fff;font-size:12px;font-weight:600;padding:8px 6px;text-align:center">Avg income</div>
+        <div style="font-size:12px;font-weight:600;padding:8px 6px;text-align:center;border-left:1px solid #000">Wealth signal</div>
+        <div style="font-size:12px;font-weight:600;padding:8px 6px;text-align:center;border-left:1px solid #000">Share $200K+</div>
+      </div>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:#2D2C2A">
+        <span style="display:flex;align-items:center;gap:7px"><span style="width:12px;height:12px;border-radius:50%;background:#000"></span>Income center</span>
+        <span style="display:flex;align-items:center;gap:7px"><span style="width:8px;height:8px;border-radius:50%;border:2.5px solid #009500"></span>Population center</span>
+        <span style="display:flex;align-items:center;gap:7px;color:#6E6C68"><span style="width:10px;height:10px;border:1px solid #9C9A95"></span>Above-average income</span>
+      </div>
+    </div>
+    <div style="padding:18px 24px;display:flex;flex-direction:column;gap:10px;border-bottom:1px solid #E2E1DE">
+      <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#4A4845">Avg income per return, 2023</span><span style="font-size:11px;color:#6E6C68">2023 $</span></div>
+      <div style="display:flex;gap:2px;align-items:stretch">
+        <sc-for list="{{ binsA }}" as="b" hint-placeholder-count="6"><div style="flex:1;display:flex;flex-direction:column;gap:4px"><div style="height:12px;background:{{ b.c }};opacity:.85"></div><div style="font-size:10px;color:#4A4845;font-variant-numeric:tabular-nums">{{ b.lo }}</div></div></sc-for>
+        <div style="width:10px"></div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:4px"><div style="height:12px;background:#061f3d;outline:1px solid #fff;outline-offset:-2px"></div><div style="font-size:10px;color:#4A4845">$190K+</div></div>
+        <div style="width:10px"></div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:4px"><div style="height:12px;border:1px solid #b9b7b2;box-sizing:border-box;background:repeating-linear-gradient(45deg,#f4f4f2 0 3px,#b9b7b2 3px 4px)"></div><div style="font-size:10px;color:#4A4845">No data</div></div>
+      </div>
+      <div style="font-size:11px;line-height:1.5;color:#4A4845">Six quantile bins, about 38 ZIPs each. <strong style="color:#000">Outliers:</strong> 75205 Highland Park $742K · 76092 Southlake $468K · 75225 Preston Hollow $401K · +4 more</div>
+    </div>
+    <div style="flex:1;min-height:0;overflow:hidden;padding:14px 24px 0;display:none;flex-direction:column;gap:8px">
+      <div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#4A4845">Year by year</div>
+      <div style="display:grid;grid-template-columns:44px 1fr 1fr 52px;font-size:11px;color:#6E6C68;border-bottom:1px solid #000;padding-bottom:5px"><span>Year</span><span>Income ctr moved</span><span>Pop. ctr moved</span><span style="text-align:right">Gap</span></div>
+      <sc-for list="{{ rowsA }}" as="r" hint-placeholder-count="2"><div style="display:grid;grid-template-columns:44px 1fr 1fr 52px;font-size:12px;color:#2D2C2A;font-variant-numeric:tabular-nums;padding:4px 0;border-bottom:1px solid #EFEEEC"><span style="font-weight:600;color:#000">{{ r.year }}</span><span>{{ r.im }}</span><span>{{ r.pm }}</span><span style="text-align:right;font-weight:600;color:#000">{{ r.gap }}</span></div></sc-for>
+    </div>
+    <div style="margin-top:auto;padding:12px 24px;border-top:1px solid #E2E1DE;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;display:flex;justify-content:space-between"><a href="#1y" style="color:#0082FF">Year-by-year table</a><a href="#notes" style="color:#0082FF">Methodology</a></div>
+  </aside>
+  <div style="position:relative;overflow:hidden">
+    <dc-import name="MapSchematic" variant="a" px="1143" hover="{{ true }}" style="position:absolute;inset:0" hint-size="100%,100%"></dc-import>
+    <div style="position:absolute;top:20px;right:20px;display:flex;flex-direction:column;border:1px solid #C9C7C2;background:#fff"><div style="width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:18px;border-bottom:1px solid #E2E1DE">+</div><div style="width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:18px">−</div></div>
+    <div style="position:absolute;left:600px;top:150px;width:236px;background:#fff;border:1px solid #000;padding:14px;display:flex;flex-direction:column;gap:8px;box-shadow:0 8px 28px rgba(0,0,0,.10)">
+      <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:15px;font-weight:700;color:#000">75024</span><span style="font-size:12px;color:#4A4845">Plano (west)</span></div>
+      <div style="font-family:'Source Serif 4',serif;font-size:26px;font-weight:600;color:#000;line-height:1">$158K</div>
+      <div style="font-size:11px;color:#4A4845">Avg income per return · 2023</div>
+      <div style="height:1px;background:#E2E1DE"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:12px;color:#2D2C2A"><span>Rank <strong style="color:#000">38 of 238</strong></span><span>Returns <strong style="color:#000">21,340</strong></span></div>
+      <div style="position:relative;height:34px">{{ sparkA }}</div>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:#6E6C68"><span>2011 $132K</span><span>2023 $158K</span></div>
+    </div>
+    <div style="position:absolute;left:24px;right:24px;bottom:24px;background:#fff;border:1px solid #C9C7C2;padding:14px 18px;display:grid;grid-template-columns:40px 72px minmax(0,1fr);gap:18px;align-items:center">
+      <div style="width:40px;height:40px;background:#000;display:flex;align-items:center;justify-content:center"><span style="width:0;height:0;border-left:11px solid #fff;border-top:7px solid transparent;border-bottom:7px solid transparent;margin-left:3px"></span></div>
+      <div style="font-family:'Source Serif 4',serif;font-size:30px;font-weight:600;color:#000;font-variant-numeric:tabular-nums">2023</div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div style="position:relative;height:16px"><div style="position:absolute;left:0;right:0;top:7px;height:2px;background:#000"></div>
+          <div style="position:absolute;inset:0;display:flex;justify-content:space-between"><sc-for list="{{ years }}" as="y" hint-placeholder-count="13"><span style="width:1px;height:16px;background:#6E6C68"></span></sc-for></div>
+          <div style="position:absolute;right:-7px;top:1px;width:14px;height:14px;background:#000;border:2px solid #fff;box-shadow:0 0 0 1px #000"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:#4A4845;font-variant-numeric:tabular-nums"><span>2011</span><span>2014</span><span>2017</span><span>2020</span><span>2023</span></div>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+<div class="dv-opt" id="1b"><div class="dv-olabel"><a class="dv-oid" href="#1b">1b</a>Data desk · top bar + right panel · dark theme shown</div>
+<div class="dv-card" style="width:1280px;height:800px;display:grid;grid-template-rows:56px minmax(0,1fr);font-family:'IBM Plex Sans',sans-serif;background:#17191d;color:#e7eaf0;border-color:#2c3038">
+  <header style="display:flex;align-items:center;gap:16px;padding:0 16px;border-bottom:1px solid #2c3038">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#9aa1ad">where-the-money-is</span>
+    <div style="display:flex;align-items:center;gap:10px;background:#23262c;border:1px solid #3a3f48;border-radius:4px;padding:7px 10px;width:340px"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#17191d;background:#e7eaf0;padding:1px 5px;border-radius:2px">04</span><span style="font-size:14px;font-weight:500;flex:1">Dallas–Fort Worth–Arlington, TX</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#9aa1ad">⌘K</span></div>
+    <div style="display:flex;gap:2px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#9aa1ad"><span style="border:1px solid #3a3f48;padding:6px 8px;border-radius:4px 0 0 4px">[ prev</span><span style="border:1px solid #3a3f48;padding:6px 8px;border-radius:0 4px 4px 0">next ]</span></div>
+    <div style="flex:1"></div>
+    <div style="display:flex;border:1px solid #3a3f48;border-radius:4px;overflow:hidden;font-size:13px">
+      <span style="padding:7px 12px;background:#e7eaf0;color:#17191d;font-weight:600">Avg income</span>
+      <span style="padding:7px 12px;border-left:1px solid #3a3f48">Wealth signal <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#9aa1ad">proxy</span></span>
+      <span style="padding:7px 12px;border-left:1px solid #3a3f48">Share $200K+</span>
+    </div>
+    <div style="display:flex;border:1px solid #3a3f48;border-radius:4px;overflow:hidden;font-size:12px;font-family:'IBM Plex Mono',monospace"><span style="padding:6px 9px;color:#9aa1ad">light</span><span style="padding:6px 9px;background:#2c3038">dark</span></div>
+  </header>
+  <div style="display:grid;grid-template-columns:minmax(0,1fr) 340px;min-height:0">
+    <div style="display:grid;grid-template-rows:minmax(0,1fr) 92px;min-height:0;border-right:1px solid #2c3038">
+      <div style="position:relative;overflow:hidden">
+        <dc-import name="MapSchematic" variant="b" px="944" style="position:absolute;inset:0" hint-size="100%,100%"></dc-import>
+        <div style="position:absolute;left:16px;bottom:16px;width:400px;background:rgba(23,25,29,.94);border:1px solid #3a3f48;border-radius:4px;padding:12px 14px;display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;justify-content:space-between;font-size:12px"><span style="font-weight:600">Avg income per return · each tick is one ZIP</span><span style="font-family:'IBM Plex Mono',monospace;color:#9aa1ad">n=238</span></div>
+          <div style="position:relative;height:30px">
+            <sc-for list="{{ ticksB }}" as="t" hint-placeholder-count="0"><span style="position:absolute;left:{{ t.x }};top:0;width:1.5px;height:18px;background:{{ t.c }}"></span></sc-for>
+            <span style="position:absolute;left:79.5%;top:2px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#9aa1ad">//</span>
+            <div style="position:absolute;left:0;right:0;top:22px;height:6px;display:flex;gap:1px"><sc-for list="{{ binSpansB }}" as="b" hint-placeholder-count="6"><span style="width:{{ b.w }};background:{{ b.c }}"></span></sc-for><span style="width:4%"></span><span style="flex:1;background:#440154;outline:1px solid #fff;outline-offset:-1px"></span></div>
+          </div>
+          <div style="position:relative;height:12px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#9aa1ad"><sc-for list="{{ binSpansB }}" as="b" hint-placeholder-count="6"><span style="position:absolute;left:{{ b.x }}">{{ b.lo }}</span></sc-for><span style="position:absolute;left:84%">190K+</span></div>
+          <div style="display:flex;gap:14px;font-size:11px;color:#c9ced8;align-items:center"><span style="display:flex;gap:6px;align-items:center"><span style="width:14px;height:10px;background:repeating-linear-gradient(45deg,#24272d 0 3px,#4a4f59 3px 4px);border:1px solid #4a4f59"></span>No data (9)</span><span>Outliers: 75205, 76092, 75225, 75209, 76262, 75220, 75230</span></div>
+        </div>
+      </div>
+      <div style="border-top:1px solid #2c3038;padding:12px 16px;display:grid;grid-template-columns:36px 150px minmax(0,1fr);gap:16px;align-items:center">
+        <div style="width:36px;height:36px;border-radius:4px;background:#e7eaf0;display:flex;align-items:center;justify-content:center"><span style="width:0;height:0;border-left:10px solid #17191d;border-top:6px solid transparent;border-bottom:6px solid transparent;margin-left:3px"></span></div>
+        <div style="display:flex;flex-direction:column;gap:2px"><span style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:500">2023</span><span style="font-size:11px;color:#9aa1ad">gap between centers</span></div>
+        <div style="position:relative;height:60px">{{ gapSparkB }}</div>
+      </div>
+    </div>
+    <aside style="display:flex;flex-direction:column;min-height:0;overflow:hidden">
+      <div style="padding:18px 18px 16px;border-bottom:1px solid #2c3038;display:flex;flex-direction:column;gap:14px">
+        <p style="margin:0;font-size:17px;line-height:1.45;color:#e7eaf0;text-wrap:pretty">{{ finding }}</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:#2c3038;border:1px solid #2c3038;border-radius:4px;overflow:hidden">
+          <div style="background:#17191d;padding:10px"><div style="font-size:10px;color:#9aa1ad">Income ctr</div><div style="font-family:'IBM Plex Mono',monospace;font-size:17px;color:#ff5c8a">{{ incTotal }}</div><div style="font-size:10px;color:#9aa1ad">mi NNW</div></div>
+          <div style="background:#17191d;padding:10px"><div style="font-size:10px;color:#9aa1ad">Pop. ctr</div><div style="font-family:'IBM Plex Mono',monospace;font-size:17px">{{ popTotal }}</div><div style="font-size:10px;color:#9aa1ad">mi NW</div></div>
+          <div style="background:#17191d;padding:10px"><div style="font-size:10px;color:#9aa1ad">Gap now</div><div style="font-family:'IBM Plex Mono',monospace;font-size:17px">{{ gap1 }}</div><div style="font-size:10px;color:#9aa1ad">mi, was {{ gap0 }}</div></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:7px;font-size:13px">
+          <span style="display:flex;align-items:center;gap:8px"><span style="width:14px;height:14px;border-radius:3px;background:#ff5c8a"></span>Income-weighted center</span>
+          <span style="display:flex;align-items:center;gap:8px"><span style="width:14px;height:14px;border-radius:3px;background:#e7eaf0"></span>Population-weighted center <span style="font-size:11px;color:#9aa1ad">(by returns)</span></span>
+          <span style="display:flex;align-items:center;gap:8px;color:#9aa1ad"><span style="width:12px;height:12px;border-radius:3px;border:1px solid #6a707b"></span>Above-average-income center</span>
+        </div>
+      </div>
+      <div style="padding:14px 18px;border-bottom:1px solid #2c3038;display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-family:'IBM Plex Mono',monospace;font-size:15px">75024</span><span style="font-size:12px;color:#9aa1ad">Plano (west) · pinned</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:end"><span style="font-family:'IBM Plex Mono',monospace;font-size:24px">$158K</span><div style="width:120px;height:30px;position:relative">{{ sparkB }}</div></div>
+        <div style="display:flex;gap:14px;font-size:11px;color:#9aa1ad"><span>rank 38/238</span><span>21,340 returns</span><span>+34% vs metro</span></div>
+      </div>
+      <div style="flex:1;min-height:0;overflow:hidden;padding:12px 18px;display:flex;flex-direction:column">
+        <div style="display:grid;grid-template-columns:36px 1fr 1fr 40px;gap:6px;font-size:10px;color:#9aa1ad;padding-bottom:6px;border-bottom:1px solid #3a3f48"><span>year</span><span>income ctr</span><span>pop. ctr</span><span style="text-align:right">gap</span></div>
+        <sc-for list="{{ rowsB }}" as="r" hint-placeholder-count="8"><div style="display:grid;grid-template-columns:36px 1fr 1fr 40px;gap:6px;font-family:'IBM Plex Mono',monospace;font-size:11px;padding:4px 0;border-bottom:1px solid #24272d;color:#c9ced8"><span style="color:#e7eaf0">{{ r.year }}</span><span>{{ r.ill }}</span><span>{{ r.pll }}</span><span style="text-align:right;color:#e7eaf0">{{ r.gap }}</span></div></sc-for>
+      </div>
+    </aside>
+  </div>
+</div></div>
+
+<div class="dv-opt" id="1c"><div class="dv-olabel"><a class="dv-oid" href="#1c">1c</a>Civic atlas · full-bleed map, floating cards · light</div>
+<div class="dv-card" style="width:1280px;height:800px;position:relative;font-family:'Public Sans',sans-serif;background:#efe9dd;border-radius:6px">
+  <dc-import name="MapSchematic" variant="c" px="1280" style="position:absolute;inset:0" hint-size="100%,100%"></dc-import>
+  <div style="position:absolute;top:24px;left:24px;width:440px;background:#f7f3ea;border:1px solid #d6ccb8;border-radius:6px;padding:22px 24px;display:flex;flex-direction:column;gap:14px;box-shadow:0 2px 0 #d6ccb8">
+    <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#8a4a1c">Where the money is</span><span style="font-size:12px;color:#5c534a">4 / 50</span></div>
+    <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px"><h1 style="margin:0;font-family:Newsreader,serif;font-weight:500;font-size:44px;line-height:1;color:#2a2622;letter-spacing:-.01em">Dallas–Fort Worth</h1><span style="font-size:13px;font-weight:600;color:#8a4a1c;border-bottom:1.5px solid #8a4a1c;white-space:nowrap">Change metro</span></div>
+    <p style="margin:0;font-family:Newsreader,serif;font-size:21px;line-height:1.35;color:#2a2622;text-wrap:pretty">{{ finding }}</p>
+    <div style="display:flex;flex-direction:column;gap:6px;font-size:14px;color:#2a2622;border-top:1px solid #d6ccb8;padding-top:12px">
+      <span style="display:flex;gap:10px;align-items:center"><span style="width:12px;height:12px;border-radius:50%;border:4px solid #2a2622;box-sizing:border-box"></span><strong style="font-weight:600">Average income per return</strong></span>
+      <span style="display:flex;gap:10px;align-items:center;color:#5c534a"><span style="width:12px;height:12px;border-radius:50%;border:1.5px solid #8b8172;box-sizing:border-box"></span>Wealth signal: capital income per return (a proxy, not net worth)</span>
+      <span style="display:flex;gap:10px;align-items:center;color:#5c534a"><span style="width:12px;height:12px;border-radius:50%;border:1.5px solid #8b8172;box-sizing:border-box"></span>Share of returns over $200K</span>
+    </div>
+  </div>
+  <div style="position:absolute;top:24px;right:24px;width:252px;background:#f7f3ea;border:1px solid #d6ccb8;border-radius:6px;padding:16px 18px;display:flex;flex-direction:column;gap:6px">
+    <div style="font-size:12px;font-weight:600;color:#2a2622;margin-bottom:4px">Avg income per return, 2023</div>
+    <div style="display:flex;gap:10px;align-items:center;font-size:12px;color:#2a2622"><span style="width:26px;height:16px;background:#4f1a04;border:1.5px solid #f7f3ea;outline:1px solid #4f1a04"></span><span><strong>$190K+</strong> · 7 ZIPs</span></div>
+    <div style="font-size:11px;line-height:1.45;color:#5c534a;padding:2px 0 6px 36px">Highland Park, Southlake, Preston Hollow, University Park, Westlake, Bluffview, Hillcrest</div>
+    <div style="height:1px;background:#d6ccb8;margin:2px 0 4px"></div>
+    <sc-for list="{{ binsCrev }}" as="b" hint-placeholder-count="6"><div style="display:flex;gap:10px;align-items:center;font-size:12px;color:#2a2622;font-variant-numeric:tabular-nums"><span style="width:26px;height:16px;background:{{ b.c }};opacity:.85"></span><span style="flex:1">{{ b.range }}</span><span style="color:#8b8172">{{ b.n }}</span></div></sc-for>
+    <div style="display:flex;gap:10px;align-items:center;font-size:12px;color:#2a2622;margin-top:4px"><span style="width:26px;height:16px;background:repeating-linear-gradient(45deg,#efe9dd 0 3px,#bfb4a0 3px 4px);border:1px solid #bfb4a0;box-sizing:border-box"></span><span style="flex:1">No data (under ~100 returns)</span><span style="color:#8b8172">9</span></div>
+    <div style="height:1px;background:#d6ccb8;margin:8px 0 4px"></div>
+    <div style="display:flex;gap:10px;align-items:center;font-size:12px"><span style="width:12px;height:12px;border-radius:50%;background:#0b5d6b;margin:0 7px"></span>Income center</div>
+    <div style="display:flex;gap:10px;align-items:center;font-size:12px"><span style="width:8px;height:8px;border-radius:50%;border:2.5px solid #2a2622;margin:0 7px"></span>Population center</div>
+  </div>
+  <div style="position:absolute;left:50%;bottom:24px;transform:translateX(-50%);background:#f7f3ea;border:1px solid #d6ccb8;border-radius:6px;padding:8px;display:flex;gap:4px;align-items:center">
+    <div style="width:38px;height:34px;border-radius:4px;background:#2a2622;display:flex;align-items:center;justify-content:center"><span style="width:0;height:0;border-left:10px solid #f7f3ea;border-top:6px solid transparent;border-bottom:6px solid transparent;margin-left:3px"></span></div>
+    <sc-for list="{{ yearsC }}" as="y" hint-placeholder-count="13"><span style="font-size:12px;font-weight:{{ y.w }};padding:8px 7px;border-radius:4px;background:{{ y.bg }};color:{{ y.fg }};font-variant-numeric:tabular-nums">{{ y.label }}</span></sc-for>
+  </div>
+  <div style="position:absolute;right:24px;bottom:24px;background:#2a2622;color:#f7f3ea;border-radius:6px;padding:10px 14px;font-size:13px;font-weight:600">Year-by-year table</div>
+</div></div>
+</div>
+
+<div class="dv-group">Mobile (390 px)</div>
+<div class="dv-opts">
+<div class="dv-opt" id="1d"><div class="dv-olabel"><a class="dv-oid" href="#1d">1d</a>Bottom sheet, peek state · <a class="dv-oid" href="#1a">1a</a> tokens</div>
+<div class="dv-card" style="width:390px;height:844px;position:relative;font-family:Inter,sans-serif;background:#fff;border-radius:0">
+  <div style="position:absolute;left:0;right:0;top:0;height:56px;background:#fff;border-bottom:1px solid #E2E1DE;display:flex;align-items:center;gap:6px;padding:0 12px;z-index:2">
+    <div style="flex:1;border:1px solid #000;padding:10px 12px;font-size:14px;font-weight:600;display:flex;justify-content:space-between;align-items:center">Dallas–Fort Worth<span style="width:6px;height:6px;border-right:1.5px solid #000;border-bottom:1.5px solid #000;transform:rotate(45deg) translateY(-2px)"></span></div>
+    <div style="width:44px;height:40px;border:1px solid #C9C7C2;display:flex;align-items:center;justify-content:center"><span style="width:7px;height:7px;border-left:1.5px solid #000;border-bottom:1.5px solid #000;transform:rotate(45deg) translateX(2px)"></span></div>
+    <div style="width:44px;height:40px;border:1px solid #C9C7C2;display:flex;align-items:center;justify-content:center"><span style="width:7px;height:7px;border-right:1.5px solid #000;border-top:1.5px solid #000;transform:rotate(45deg) translateX(-2px)"></span></div>
+  </div>
+  <div style="position:absolute;left:0;right:0;top:56px;height:560px;overflow:hidden"><dc-import name="MapSchematic" variant="a" crop="square" px="524" style="position:absolute;inset:0" hint-size="100%,100%"></dc-import></div>
+  <div style="position:absolute;left:0;right:0;top:500px;bottom:0;background:#fff;border-top:1px solid #C9C7C2;box-shadow:0 -8px 28px rgba(0,0,0,.10);padding:8px 16px 16px;display:flex;flex-direction:column;gap:14px">
+    <div style="align-self:center;width:36px;height:4px;background:#C9C7C2"></div>
+    <p style="margin:0;font-family:'Source Serif 4',serif;font-size:18px;line-height:1.35;color:#000">{{ finding }}</p>
+    <div style="display:grid;grid-template-columns:44px 1fr 44px;gap:10px;align-items:center">
+      <div style="width:44px;height:44px;background:#000;display:flex;align-items:center;justify-content:center"><span style="width:0;height:0;border-left:11px solid #fff;border-top:7px solid transparent;border-bottom:7px solid transparent;margin-left:3px"></span></div>
+      <div style="position:relative;height:44px"><div style="position:absolute;left:0;right:0;top:21px;height:2px;background:#000"></div><div style="position:absolute;right:-8px;top:14px;width:16px;height:16px;background:#000;border:2px solid #fff;box-shadow:0 0 0 1px #000"></div><span style="position:absolute;left:0;bottom:0;font-size:10px;color:#6E6C68">2011</span></div>
+      <span style="font-family:'Source Serif 4',serif;font-size:20px;font-weight:600;text-align:right">2023</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border:1px solid #000">
+      <div style="background:#000;color:#fff;font-size:12px;font-weight:600;padding:12px 4px;text-align:center">Avg income</div>
+      <div style="font-size:12px;font-weight:600;padding:12px 4px;text-align:center;border-left:1px solid #000">Wealth</div>
+      <div style="font-size:12px;font-weight:600;padding:12px 4px;text-align:center;border-left:1px solid #000">$200K+</div>
+    </div>
+    <div style="font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#0082FF;text-align:center">Swipe up for legend, table, method</div>
+  </div>
+</div></div>
+
+<div class="dv-opt" id="1e"><div class="dv-olabel"><a class="dv-oid" href="#1e">1e</a>Stacked scroll page · <a class="dv-oid" href="#1c">1c</a> tokens</div>
+<div class="dv-card" style="width:390px;font-family:'Public Sans',sans-serif;background:#f7f3ea;border-radius:6px">
+  <div style="padding:16px;display:flex;flex-direction:column;gap:8px">
+    <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#8a4a1c">Where the money is</span><span style="font-size:13px;font-weight:600;color:#8a4a1c;border-bottom:1.5px solid #8a4a1c">Change metro</span></div>
+    <h1 style="margin:0;font-family:Newsreader,serif;font-weight:500;font-size:34px;line-height:1.05;color:#2a2622">Dallas–Fort Worth</h1>
+  </div>
+  <div style="position:relative;height:380px;border-top:1px solid #d6ccb8;border-bottom:1px solid #d6ccb8"><dc-import name="MapSchematic" variant="c" crop="square" px="429" style="position:absolute;inset:0" hint-size="100%,100%"></dc-import></div>
+  <div style="display:flex;gap:4px;padding:10px 16px;overflow:hidden;align-items:center;border-bottom:1px solid #d6ccb8">
+    <div style="flex:none;width:44px;height:44px;border-radius:4px;background:#2a2622;display:flex;align-items:center;justify-content:center"><span style="width:0;height:0;border-left:10px solid #f7f3ea;border-top:6px solid transparent;border-bottom:6px solid transparent;margin-left:3px"></span></div>
+    <sc-for list="{{ yearsCtail }}" as="y" hint-placeholder-count="6"><span style="flex:none;font-size:13px;font-weight:{{ y.w }};padding:13px 8px;border-radius:4px;background:{{ y.bg }};color:{{ y.fg }}">{{ y.label }}</span></sc-for>
+  </div>
+  <div style="padding:18px 16px;display:flex;flex-direction:column;gap:16px">
+    <p style="margin:0;font-family:Newsreader,serif;font-size:20px;line-height:1.35;color:#2a2622">{{ finding }}</p>
+    <div style="display:flex;border:1px solid #2a2622;border-radius:4px;overflow:hidden;font-size:13px"><span style="flex:1;text-align:center;padding:12px 0;background:#2a2622;color:#f7f3ea;font-weight:600">Avg income</span><span style="flex:1;text-align:center;padding:12px 0">Wealth</span><span style="flex:1;text-align:center;padding:12px 0;border-left:1px solid #2a2622">$200K+</span></div>
+    <div style="display:flex;flex-direction:column;gap:4px">
+      <div style="display:flex;gap:2px"><sc-for list="{{ binsC }}" as="b" hint-placeholder-count="6"><span style="flex:1;height:14px;background:{{ b.c }};opacity:.85"></span></sc-for><span style="width:8px"></span><span style="flex:1;height:14px;background:#4f1a04"></span><span style="width:8px"></span><span style="flex:1;height:14px;background:repeating-linear-gradient(45deg,#efe9dd 0 3px,#bfb4a0 3px 4px);border:1px solid #bfb4a0;box-sizing:border-box"></span></div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:#5c534a"><span>$36K</span><span>$92K</span><span>$190K+</span><span>No data</span></div>
+    </div>
+    <div style="display:flex;flex-direction:column">
+      <div style="display:grid;grid-template-columns:48px 1fr 1fr 56px;font-size:11px;color:#8b8172;padding-bottom:6px;border-bottom:1.5px solid #2a2622"><span>Year</span><span>Income</span><span>Pop.</span><span style="text-align:right">Gap</span></div>
+      <sc-for list="{{ rowsShort }}" as="r" hint-placeholder-count="5"><div style="display:grid;grid-template-columns:48px 1fr 1fr 56px;font-size:13px;color:#2a2622;padding:7px 0;border-bottom:1px solid #e1d9c7;font-variant-numeric:tabular-nums"><strong style="font-weight:600">{{ r.year }}</strong><span>{{ r.im }}</span><span>{{ r.pm }}</span><strong style="text-align:right;font-weight:600">{{ r.gap }}</strong></div></sc-for>
+      <span style="font-size:13px;font-weight:600;color:#8a4a1c;padding:10px 0">Show all 13 years</span>
+    </div>
+    <div style="font-size:13px;font-weight:600;color:#8a4a1c;border-top:1px solid #d6ccb8;padding-top:14px">About the data and method</div>
+  </div>
+</div></div>
+</div>
+
+<div class="dv-group">Design tokens</div>
+<p class="dv-gnote">Core custom properties for each direction, light and dark. The full token file follows once a direction is picked.</p>
+<div class="dv-opts">
+<sc-for list="{{ tokenSets }}" as="t" hint-placeholder-count="3">
+<div class="dv-opt" id="{{ t.id }}"><div class="dv-olabel"><a class="dv-oid" href="#{{ t.id }}">{{ t.id }}</a>{{ t.name }}</div>
+<div class="dv-card" style="width:400px;border-radius:4px">
+  <div style="display:grid;grid-template-columns:1fr 1fr">
+    <div style="padding:14px;background:{{ t.lightBg }};display:flex;flex-direction:column;gap:6px"><span style="font:600 10px ui-monospace,Menlo,monospace;color:{{ t.lightFg }}">LIGHT</span><div style="display:flex;gap:4px"><sc-for list="{{ t.light }}" as="c" hint-placeholder-count="5"><span style="width:28px;height:28px;background:{{ c }};border:1px solid rgba(128,128,128,.3)"></span></sc-for></div></div>
+    <div style="padding:14px;background:{{ t.darkBg }};display:flex;flex-direction:column;gap:6px"><span style="font:600 10px ui-monospace,Menlo,monospace;color:{{ t.darkFg }}">DARK</span><div style="display:flex;gap:4px"><sc-for list="{{ t.dark }}" as="c" hint-placeholder-count="5"><span style="width:28px;height:28px;background:{{ c }};border:1px solid rgba(128,128,128,.3)"></span></sc-for></div></div>
+  </div>
+  <div style="padding:12px 14px;border-top:1px solid rgba(0,0,0,.08);font-size:12px;line-height:1.5;color:#333">{{ t.type }}</div>
+  <pre style="margin:0;padding:12px 14px;background:#f7f7f6;border-top:1px solid rgba(0,0,0,.08);font:11px/1.55 ui-monospace,Menlo,monospace;color:#2d2c2a;white-space:pre-wrap">{{ t.css }}</pre>
+</div></div>
+</sc-for>
+</div>
+
+<div class="dv-group">Sequential ramps (three measures each)</div>
+<p class="dv-gnote">Every ramp is monotonic in lightness, so bins stay ordered under deuteranopia, protanopia and grayscale. Swatches show 100% and at the 74% map opacity over the light basemap. Share over $200K is well behaved and gets six equal-interval bins with no outlier class.</p>
+<div class="dv-opts">
+<sc-for list="{{ rampSets }}" as="rs" hint-placeholder-count="3">
+<div class="dv-opt" id="{{ rs.id }}"><div class="dv-olabel"><a class="dv-oid" href="#{{ rs.id }}">{{ rs.id }}</a>{{ rs.name }}</div>
+<div class="dv-card" style="width:400px;padding:16px;display:flex;flex-direction:column;gap:16px;border-radius:4px">
+  <sc-for list="{{ rs.measures }}" as="m" hint-placeholder-count="3">
+  <div style="display:flex;flex-direction:column;gap:5px">
+    <div style="display:flex;justify-content:space-between;font:600 12px Inter,sans-serif;color:#000"><span>{{ m.name }}</span><span style="font-weight:400;color:#6E6C68">{{ m.note }}</span></div>
+    <div style="display:flex;gap:2px"><sc-for list="{{ m.sw }}" as="c" hint-placeholder-count="6"><span style="flex:1;height:22px;background:{{ c }}"></span></sc-for><span style="width:8px"></span><span style="flex:1;height:22px;background:{{ m.out }};outline:1px solid #fff;outline-offset:-3px;opacity:{{ m.outOp }}"></span></div>
+    <div style="display:flex;gap:2px;background:#f4f4f2;padding:3px"><sc-for list="{{ m.sw }}" as="c" hint-placeholder-count="6"><span style="flex:1;height:12px;background:{{ c }};opacity:.74"></span></sc-for><span style="width:8px"></span><span style="flex:1;height:12px;background:{{ m.out }};opacity:{{ m.outOp }}"></span></div>
+    <div style="font:10px ui-monospace,Menlo,monospace;color:#6E6C68">{{ m.hex }}</div>
+  </div>
+  </sc-for>
+</div></div>
+</sc-for>
+</div>
+
+<div class="dv-group">Outlier and no-data treatments</div>
+<div class="dv-opts">
+<div class="dv-opt" id="1l"><div class="dv-olabel"><a class="dv-oid" href="#1l">1l</a>Near-black outlier with inner keyline · hatched no-data</div>
+<div class="dv-card" style="width:300px;padding:16px;display:flex;flex-direction:column;gap:10px;font:12px Inter,sans-serif;border-radius:4px">
+  <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:2px;background:#f4f4f2;padding:4px"><span style="height:36px;background:#5d9bdc;opacity:.74"></span><span style="height:36px;background:#2f78c6;opacity:.74"></span><span style="height:36px;background:#061f3d;outline:1.5px solid #fff;outline-offset:-3px"></span><span style="height:36px;background:#11539c;opacity:.74"></span><span style="height:36px;background:repeating-linear-gradient(45deg,#f4f4f2 0 3px,#b9b7b2 3px 4.5px);outline:1px solid #b9b7b2;outline-offset:-1px"></span><span style="height:36px;background:#93bdea;opacity:.74"></span></div>
+  <span style="color:#4A4845;line-height:1.5">Outlier reads as "beyond the scale", not as the top bin. Hatching can't be confused with the lightest bin. Hatch drawn as a MapLibre fill-pattern sprite.</span>
+</div></div>
+<div class="dv-opt" id="1m"><div class="dv-olabel"><a class="dv-oid" href="#1m">1m</a>Top-bin color + stipple · flat gray no-data with outline</div>
+<div class="dv-card" style="width:300px;padding:16px;display:flex;flex-direction:column;gap:10px;font:12px Inter,sans-serif;border-radius:4px">
+  <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:2px;background:#f4f4f2;padding:4px"><span style="height:36px;background:#5d9bdc;opacity:.74"></span><span style="height:36px;background:#2f78c6;opacity:.74"></span><span style="height:36px;background:radial-gradient(#fff 1px,transparent 1.4px) 0 0/5px 5px,#11539c"></span><span style="height:36px;background:#11539c;opacity:.74"></span><span style="height:36px;background:#d9d8d4;outline:1px dashed #6E6C68;outline-offset:-2px"></span><span style="height:36px;background:#93bdea;opacity:.74"></span></div>
+  <span style="color:#4A4845;line-height:1.5">Keeps the ramp to six colors; texture marks the extreme. Gray no-data is cheaper to render but sits closer to the light bins.</span>
+</div></div>
+<div class="dv-opt" id="1n"><div class="dv-olabel"><a class="dv-oid" href="#1n">1n</a>Outlier as heavy outline + label · no-data as empty outline</div>
+<div class="dv-card" style="width:300px;padding:16px;display:flex;flex-direction:column;gap:10px;font:12px Inter,sans-serif;border-radius:4px">
+  <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:2px;background:#f4f4f2;padding:4px"><span style="height:36px;background:#5d9bdc;opacity:.74"></span><span style="height:36px;background:#2f78c6;opacity:.74"></span><span style="height:36px;background:#11539c;box-shadow:inset 0 0 0 2.5px #000;display:flex;align-items:center;justify-content:center;color:#fff;font-size:9px;font-weight:700">75205</span><span style="height:36px;background:#11539c;opacity:.74"></span><span style="height:36px;background:transparent;box-shadow:inset 0 0 0 1px #6E6C68"></span><span style="height:36px;background:#93bdea;opacity:.74"></span></div>
+  <span style="color:#4A4845;line-height:1.5">Names outliers on the map itself. Strongest for "check the rich suburbs I know", but labels crowd when several outliers touch.</span>
+</div></div>
+</div>
+
+<div class="dv-group">Legend</div>
+<div class="dv-opts">
+<div class="dv-opt" id="1o"><div class="dv-olabel"><a class="dv-oid" href="#1o">1o</a>Stepped bar, outlier and no-data split off</div>
+<div class="dv-card" style="width:340px;padding:16px;display:flex;flex-direction:column;gap:10px;font-family:Inter,sans-serif;border-radius:4px">
+  <div style="font-size:12px;font-weight:600;color:#000">Avg income per return, 2023</div>
+  <div style="display:flex;gap:2px"><sc-for list="{{ binsA }}" as="b" hint-placeholder-count="6"><div style="flex:1;display:flex;flex-direction:column;gap:4px"><div style="height:12px;background:{{ b.c }}"></div><div style="font-size:10px;color:#4A4845">{{ b.lo }}</div></div></sc-for><div style="width:10px"></div><div style="flex:1;display:flex;flex-direction:column;gap:4px"><div style="height:12px;background:#061f3d"></div><div style="font-size:10px;color:#4A4845">$190K+</div></div><div style="width:10px"></div><div style="flex:1;display:flex;flex-direction:column;gap:4px"><div style="height:12px;background:repeating-linear-gradient(45deg,#f4f4f2 0 3px,#b9b7b2 3px 4px);border:1px solid #b9b7b2;box-sizing:border-box"></div><div style="font-size:10px;color:#4A4845">No data</div></div></div>
+  <div style="font-size:11px;line-height:1.5;color:#4A4845">Outliers: 75205 Highland Park, 76092 Southlake, 75225 Preston Hollow +4</div>
+  <div style="font-size:11px;color:#6E6C68;border-top:1px solid #E2E1DE;padding-top:8px">Spec: hover a bin highlights its ZIPs; labels are lower bounds; outlier = values above Q3 + 3×IQR.</div>
+</div></div>
+<div class="dv-opt" id="1p"><div class="dv-olabel"><a class="dv-oid" href="#1p">1p</a>Strip plot: one tick per ZIP, shows skew</div>
+<div class="dv-card" style="width:340px;padding:16px;display:flex;flex-direction:column;gap:8px;font-family:Inter,sans-serif;border-radius:4px">
+  <div style="font-size:12px;font-weight:600;color:#000">Avg income per return, 2023</div>
+  <div style="position:relative;height:30px">
+    <sc-for list="{{ ticksA }}" as="t" hint-placeholder-count="0"><span style="position:absolute;left:{{ t.x }};top:0;width:1.5px;height:18px;background:{{ t.c }}"></span></sc-for>
+    <span style="position:absolute;left:79.5%;top:2px;font-size:12px;color:#6E6C68">//</span>
+    <div style="position:absolute;left:0;right:0;top:22px;height:6px;display:flex;gap:1px"><sc-for list="{{ binSpansA }}" as="b" hint-placeholder-count="6"><span style="width:{{ b.w }};background:{{ b.c }}"></span></sc-for><span style="width:4%"></span><span style="flex:1;background:#061f3d"></span></div>
+  </div>
+  <div style="position:relative;height:12px;font-size:10px;color:#4A4845"><sc-for list="{{ binSpansA }}" as="b" hint-placeholder-count="6"><span style="position:absolute;left:{{ b.x }}">{{ b.lo }}</span></sc-for><span style="position:absolute;left:84%">190K+</span></div>
+  <div style="font-size:11px;color:#6E6C68;border-top:1px solid #E2E1DE;padding-top:8px">Spec: bins take equal ZIP counts but unequal dollar widths, so the ticks make the skew visible. Hovered ZIP draws a tall black tick.</div>
+</div></div>
+<div class="dv-opt" id="1q"><div class="dv-olabel"><a class="dv-oid" href="#1q">1q</a>Vertical list with counts, outliers named</div>
+<div class="dv-card" style="width:260px;padding:16px;display:flex;flex-direction:column;gap:6px;font-family:Inter,sans-serif;border-radius:4px">
+  <div style="font-size:12px;font-weight:600;color:#000;margin-bottom:4px">Avg income per return, 2023</div>
+  <div style="display:flex;gap:10px;align-items:center;font-size:12px"><span style="width:24px;height:14px;background:#061f3d"></span><strong>$190K+</strong><span style="margin-left:auto;color:#6E6C68">7</span></div>
+  <div style="font-size:11px;line-height:1.45;color:#4A4845;padding-left:34px">Highland Park, Southlake, Preston Hollow, University Park, Westlake, Bluffview, Hillcrest</div>
+  <sc-for list="{{ binsArev }}" as="b" hint-placeholder-count="6"><div style="display:flex;gap:10px;align-items:center;font-size:12px;font-variant-numeric:tabular-nums"><span style="width:24px;height:14px;background:{{ b.c }}"></span><span>{{ b.range }}</span><span style="margin-left:auto;color:#6E6C68">{{ b.n }}</span></div></sc-for>
+  <div style="display:flex;gap:10px;align-items:center;font-size:12px;margin-top:4px"><span style="width:24px;height:14px;background:repeating-linear-gradient(45deg,#f4f4f2 0 3px,#b9b7b2 3px 4px);border:1px solid #b9b7b2;box-sizing:border-box"></span><span>No data</span><span style="margin-left:auto;color:#6E6C68">9</span></div>
+</div></div>
+</div>
+
+<div class="dv-group">Center markers and trails</div>
+<div class="dv-opts">
+<div class="dv-opt" id="1r"><div class="dv-olabel"><a class="dv-oid" href="#1r">1r</a>Filled vs hollow, year beads, dashed population trail</div>
+<div class="dv-card" style="width:300px;height:280px;position:relative;border-radius:4px"><dc-import name="MapSchematic" variant="a" crop="centers" px="301" style="position:absolute;inset:0" hint-size="100%,100%"></dc-import></div>
+<div style="width:300px;font:11px/1.5 Inter,sans-serif;color:#4A4845">Beads = one per year, hover shows year + coords. Shape and fill carry identity, so it survives colorblindness and grayscale.</div></div>
+<div class="dv-opt" id="1s"><div class="dv-olabel"><a class="dv-oid" href="#1s">1s</a>Diamond vs square, chevrons show direction</div>
+<div class="dv-card" style="width:300px;height:280px;position:relative;border-radius:4px"><dc-import name="MapSchematic" variant="a" crop="centers" px="301" marker-style="arrow" style="position:absolute;inset:0" hint-size="100%,100%"></dc-import></div>
+<div style="width:300px;font:11px/1.5 Inter,sans-serif;color:#4A4845">Direction reads without hovering. Chevrons every 4 years; best when trails are short and wiggly.</div></div>
+<div class="dv-opt" id="1t"><div class="dv-olabel"><a class="dv-oid" href="#1t">1t</a>Comet: trail thickens toward latest year · <a class="dv-oid" href="#1b">1b</a> palette</div>
+<div class="dv-card" style="width:300px;height:280px;position:relative;border-radius:4px"><dc-import name="MapSchematic" variant="b" crop="centers" px="301" marker-style="comet" style="position:absolute;inset:0" hint-size="100%,100%"></dc-import></div>
+<div style="width:300px;font:11px/1.5 Inter,sans-serif;color:#4A4845">Time encoded in width and opacity; hover state shown on 2017. Hardest to read exact years, strongest at a glance.</div></div>
+</div>
+
+<div class="dv-group">Year control</div>
+<div class="dv-opts">
+<div class="dv-opt" id="1u"><div class="dv-olabel"><a class="dv-oid" href="#1u">1u</a>Play + ticked slider</div>
+<div class="dv-card" style="width:520px;padding:16px 18px;display:grid;grid-template-columns:40px 70px minmax(0,1fr);gap:16px;align-items:center;font-family:Inter,sans-serif;border-radius:0">
+  <div style="width:40px;height:40px;background:#000;display:flex;align-items:center;justify-content:center;gap:4px"><span style="width:4px;height:14px;background:#fff"></span><span style="width:4px;height:14px;background:#fff"></span></div>
+  <div style="font-family:'Source Serif 4',serif;font-size:30px;font-weight:600">2017</div>
+  <div style="display:flex;flex-direction:column;gap:6px">
+    <div style="position:relative;height:16px"><div style="position:absolute;left:0;right:0;top:7px;height:2px;background:#C9C7C2"></div><div style="position:absolute;left:0;width:50%;top:7px;height:2px;background:#000"></div>
+      <div style="position:absolute;inset:0;display:flex;justify-content:space-between"><sc-for list="{{ years }}" as="y" hint-placeholder-count="13"><span style="width:1px;height:16px;background:#9C9A95"></span></sc-for></div>
+      <div style="position:absolute;left:calc(50% - 7px);top:1px;width:14px;height:14px;background:#000;border:2px solid #fff;box-shadow:0 0 0 1px #000"></div></div>
+    <div style="display:flex;justify-content:space-between;font-size:11px;color:#4A4845"><span>2011</span><span>2014</span><span>2017</span><span>2020</span><span>2023</span></div>
+  </div>
+</div>
+<div style="width:520px;font:11px/1.5 Inter,sans-serif;color:#4A4845">Spec: native range input, step 1, arrow keys ±1 year, Home/End jump. Play steps 900 ms per year and stops at the latest year. Choropleth crossfades 300 ms; centers glide along trail. Respect prefers-reduced-motion (step, no glide).</div></div>
+<div class="dv-opt" id="1v"><div class="dv-olabel"><a class="dv-oid" href="#1v">1v</a>Track is the gap-over-time chart · <a class="dv-oid" href="#1b">1b</a> tokens</div>
+<div class="dv-card" style="width:520px;padding:14px 16px;display:grid;grid-template-columns:36px 110px minmax(0,1fr);gap:14px;align-items:center;font-family:'IBM Plex Sans',sans-serif;background:#17191d;color:#e7eaf0;border-radius:4px">
+  <div style="width:36px;height:36px;border-radius:4px;background:#e7eaf0;display:flex;align-items:center;justify-content:center"><span style="width:0;height:0;border-left:10px solid #17191d;border-top:6px solid transparent;border-bottom:6px solid transparent;margin-left:3px"></span></div>
+  <div style="display:flex;flex-direction:column;gap:2px"><span style="font-family:'IBM Plex Mono',monospace;font-size:22px">2023</span><span style="font-size:11px;color:#9aa1ad">gap {{ gap1 }} mi</span></div>
+  <div style="position:relative;height:60px">{{ gapSparkB }}</div>
+</div>
+<div style="width:520px;font:11px/1.5 Inter,sans-serif;color:#4A4845">Scrubbing over the chart answers "is the gap growing?" directly. Needs a text alternative for screen readers (table).</div></div>
+</div>
+
+<div class="dv-group">ZIP card</div>
+<div class="dv-opts">
+<div class="dv-opt" id="1w"><div class="dv-olabel"><a class="dv-oid" href="#1w">1w</a>Hover tooltip, value first</div>
+<div class="dv-card" style="width:236px;border:1px solid #000;padding:14px;display:flex;flex-direction:column;gap:8px;font-family:Inter,sans-serif;border-radius:0">
+  <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:15px;font-weight:700">75024</span><span style="font-size:12px;color:#4A4845">Plano (west)</span></div>
+  <div style="font-family:'Source Serif 4',serif;font-size:26px;font-weight:600;line-height:1">$158K</div>
+  <div style="font-size:11px;color:#4A4845">Avg income per return · 2023</div>
+  <div style="height:1px;background:#E2E1DE"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:12px"><span>Rank <strong>38 of 238</strong></span><span>Returns <strong>21,340</strong></span></div>
+  <div style="position:relative;height:34px">{{ sparkA }}</div>
+  <div style="display:flex;justify-content:space-between;font-size:10px;color:#6E6C68"><span>2011 $132K</span><span>2023 $158K</span></div>
+</div></div>
+<div class="dv-opt" id="1x"><div class="dv-olabel"><a class="dv-oid" href="#1x">1x</a>Pinned card with metro-average line · plus suppressed state</div>
+<div style="display:flex;gap:16px;align-items:flex-start">
+<div class="dv-card" style="width:280px;padding:16px;display:flex;flex-direction:column;gap:10px;font-family:'Public Sans',sans-serif;background:#f7f3ea;border:1px solid #d6ccb8;border-radius:6px;color:#2a2622">
+  <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:12px;color:#5c534a">ZIP 75024 · Plano (west)</span><span style="font-size:12px;font-weight:600;color:#8a4a1c">Unpin</span></div>
+  <div style="display:flex;align-items:baseline;gap:10px"><span style="font-family:Newsreader,serif;font-size:34px;font-weight:500;line-height:1">$158K</span><span style="display:flex;align-items:center;gap:5px;font-size:12px"><span style="width:12px;height:12px;background:#d9621d"></span>bin 5 of 6</span></div>
+  <div style="font-size:12px;color:#5c534a">Avg income per return, 2023 · 34% above metro average ($118K)</div>
+  <div style="position:relative;height:56px;border-bottom:1px solid #d6ccb8">{{ sparkC }}</div>
+  <div style="display:flex;justify-content:space-between;font-size:11px;color:#8b8172"><span>2011</span><span>dashed: metro avg</span><span>2023</span></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;font-size:12px;border-top:1px solid #d6ccb8;padding-top:10px"><span style="color:#5c534a">Rank in metro</span><strong style="text-align:right">38 of 238</strong><span style="color:#5c534a">Tax returns</span><strong style="text-align:right">21,340</strong><span style="color:#5c534a">Change since 2011</span><strong style="text-align:right">+19.7%</strong></div>
+</div>
+<div class="dv-card" style="width:220px;padding:16px;display:flex;flex-direction:column;gap:8px;font-family:'Public Sans',sans-serif;background:#f7f3ea;border:1px solid #d6ccb8;border-radius:6px;color:#2a2622">
+  <span style="font-size:12px;color:#5c534a">ZIP 75261 · DFW Airport</span>
+  <div style="display:flex;align-items:center;gap:8px"><span style="width:22px;height:16px;background:repeating-linear-gradient(45deg,#efe9dd 0 3px,#bfb4a0 3px 4px);border:1px solid #bfb4a0;box-sizing:border-box"></span><span style="font-family:Newsreader,serif;font-size:22px">No data</span></div>
+  <span style="font-size:12px;line-height:1.5;color:#5c534a">The IRS withholds values for ZIPs with fewer than about 100 returns. This ZIP had 60 in 2023. It is excluded from ranks and centers.</span>
+</div>
+</div></div>
+</div>
+
+<div class="dv-group">Summary finding + table</div>
+<div class="dv-opts">
+<div class="dv-opt" id="1y"><div class="dv-olabel"><a class="dv-oid" href="#1y">1y</a>Full table with coordinates</div>
+<div class="dv-card" style="width:560px;padding:18px;display:flex;flex-direction:column;gap:12px;font-family:Inter,sans-serif;border-radius:0">
+  <p style="margin:0;font-family:'Source Serif 4',serif;font-size:19px;line-height:1.35">{{ finding }}</p>
+  <div style="display:flex;flex-direction:column">
+    <div style="display:grid;grid-template-columns:40px 1.5fr 44px 1.5fr 44px 48px;gap:6px;font-size:10.5px;color:#6E6C68;border-bottom:1px solid #000;padding-bottom:5px"><span>Year</span><span>Income center</span><span style="text-align:right">Moved</span><span>Population center</span><span style="text-align:right">Moved</span><span style="text-align:right">Gap</span></div>
+    <sc-for list="{{ rows }}" as="r" hint-placeholder-count="13"><div style="display:grid;grid-template-columns:40px 1.5fr 44px 1.5fr 44px 48px;gap:6px;font-size:11.5px;font-variant-numeric:tabular-nums;padding:4px 0;border-bottom:1px solid #EFEEEC;color:#2D2C2A"><strong>{{ r.year }}</strong><span>{{ r.ill }}</span><span style="text-align:right">{{ r.im }}</span><span>{{ r.pll }}</span><span style="text-align:right">{{ r.pm }}</span><strong style="text-align:right">{{ r.gap }}</strong></div></sc-for>
+  </div>
+  <div style="font-size:11px;color:#6E6C68">Miles are great-circle distances. Download CSV.</div>
+</div></div>
+<div class="dv-opt" id="1z"><div class="dv-olabel"><a class="dv-oid" href="#1z">1z</a>Gap-first table with inline bars</div>
+<div class="dv-card" style="width:360px;padding:18px;display:flex;flex-direction:column;gap:12px;font-family:Inter,sans-serif;border-radius:0">
+  <div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#4A4845">Gap between centers, miles</div>
+  <sc-for list="{{ rows }}" as="r" hint-placeholder-count="13"><div style="display:grid;grid-template-columns:40px minmax(0,1fr) 34px;gap:10px;align-items:center;font-size:12px;font-variant-numeric:tabular-nums"><span style="color:#4A4845">{{ r.year }}</span><div style="height:10px;background:#EFEEEC"><div style="height:10px;width:{{ r.gapPct }};background:#000"></div></div><strong style="text-align:right">{{ r.gap }}</strong></div></sc-for>
+  <div style="font-size:11px;color:#6E6C68">Coordinates and per-year movement in an expandable row.</div>
+</div></div>
+</div>
+
+<div class="dv-group">Metro selector</div>
+<div class="dv-opts">
+<div class="dv-opt" id="1aa"><div class="dv-olabel"><a class="dv-oid" href="#1aa">1aa</a>Search combobox + prev/next</div>
+<div class="dv-card" style="width:380px;font-family:Inter,sans-serif;border:1px solid #000;border-radius:0">
+  <div style="padding:12px 14px;border-bottom:1px solid #000;font-size:15px;display:flex;gap:2px;align-items:center">san<span style="width:1px;height:18px;background:#000"></span></div>
+  <sc-for list="{{ sanResults }}" as="m" hint-placeholder-count="4"><div style="display:grid;grid-template-columns:30px 1fr auto;gap:10px;padding:10px 14px;font-size:14px;background:{{ m.bg }};color:{{ m.fg }};border-bottom:1px solid #EFEEEC"><span style="font-size:11px;opacity:.7;font-variant-numeric:tabular-nums">{{ m.rank }}</span><span>{{ m.name }}</span><span style="font-size:11px;opacity:.7">{{ m.st }}</span></div></sc-for>
+  <div style="padding:10px 14px;font-size:11px;color:#6E6C68;display:flex;gap:14px"><span>↑↓ move</span><span>Enter open</span><span>[ ] prev/next metro</span></div>
+</div>
+<div style="width:380px;font:11px/1.5 Inter,sans-serif;color:#4A4845">Spec: ARIA combobox; matches on any word, state, or principal city ("Arlington" finds DFW); empty query lists all 50 by rank.</div></div>
+<div class="dv-opt" id="1ab"><div class="dv-olabel"><a class="dv-oid" href="#1ab">1ab</a>Jump grid: all 50 at once</div>
+<div class="dv-card" style="width:620px;padding:16px;display:flex;flex-direction:column;gap:12px;font-family:'Public Sans',sans-serif;background:#f7f3ea;border:1px solid #d6ccb8;border-radius:6px">
+  <div style="border:1px solid #2a2622;border-radius:4px;padding:10px 12px;font-size:14px;color:#8b8172">Search 50 metros</div>
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:2px 12px"><sc-for list="{{ metros }}" as="m" hint-placeholder-count="50"><span style="font-size:12px;padding:4px 6px;border-radius:3px;background:{{ m.bg }};color:{{ m.fg }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><span style="opacity:.55;font-variant-numeric:tabular-nums;margin-right:6px">{{ m.rank }}</span>{{ m.name }}</span></sc-for></div>
+</div>
+<div style="width:620px;font:11px/1.5 Inter,sans-serif;color:#4A4845">Opens as a sheet on desktop, full screen on mobile. Good for readers who browse; slower for readers who know their metro.</div></div>
+</div>
+
+<div class="dv-group" id="notes">Notes for the developer: what the design assumes</div>
+<div class="dv-card" style="max-width:920px;padding:24px 28px;font:14px/1.6 Inter,sans-serif;color:#2D2C2A;border-radius:4px">
+  <sc-for list="{{ notes }}" as="n" hint-placeholder-count="12"><div style="display:grid;grid-template-columns:220px minmax(0,1fr);gap:20px;padding:10px 0;border-bottom:1px solid #EFEEEC"><strong style="color:#000;font-size:13px">{{ n.t }}</strong><span style="font-size:13px;text-wrap:pretty">{{ n.d }}</span></div></sc-for>
+</div>
+
+<p class="dv-next">Try next: "go with <a class="dv-oid" href="#1a">1a</a> tokens, <a class="dv-oid" href="#1b">1b</a> layout, <a class="dv-oid" href="#1p">1p</a> legend" · "show <a class="dv-oid" href="#1c">1c</a> in dark" · "build the pick as a working prototype"</p>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const RAMP = {
+  a:['#e8f1fb','#c3daf4','#93bdea','#5d9bdc','#2f78c6','#11539c'],
+  b:['#fde725','#a5db36','#4ac16d','#1f9e89','#26828e','#31688e'],
+  c:['#fff4c7','#fedb91','#fdb762','#f68b3a','#d9621d','#a8430e']
+};
+const METROS = ['New York','Los Angeles','Chicago','Dallas–Fort Worth','Houston','Atlanta','Washington','Philadelphia','Miami','Phoenix','Boston','Riverside','San Francisco','Detroit','Seattle','Minneapolis','Tampa','San Diego','Denver','Orlando','Charlotte','Baltimore','St. Louis','San Antonio','Austin','Portland','Sacramento','Pittsburgh','Las Vegas','Cincinnati','Kansas City','Columbus','Indianapolis','Cleveland','Nashville','San Jose','Virginia Beach','Jacksonville','Providence','Raleigh','Milwaukee','Oklahoma City','Louisville','Memphis','Richmond','Salt Lake City','Birmingham','Hartford','Buffalo','Tucson'];
+const mi = (a,b) => Math.hypot((a[0]-b[0])*69.05, (a[1]-b[1])*57.9);
+const k = v => '$' + Math.round(v) + 'K';
+
+class Component extends DCLogic {
+  renderVals() {
+    const h = React.createElement;
+    // centers (placeholder)
+    const lerp = (a,b,t,w,ph) => [a[0]+(b[0]-a[0])*t+Math.sin(t*7+ph)*w, a[1]+(b[1]-a[1])*t+Math.cos(t*5+ph)*w*1.2];
+    const inc = Array.from({length:13},(_,i)=>lerp([32.850,-96.978],[32.9062,-97.0057],i/12,0.0016,0));
+    const pop = Array.from({length:13},(_,i)=>lerp([32.830,-96.990],[32.8515,-97.0156],i/12,0.0009,1.3));
+    const rows = inc.map((p,i)=>{ const g = mi(p,pop[i]);
+      return { year:2011+i, ill:p[0].toFixed(4)+', '+p[1].toFixed(4), pll:pop[i][0].toFixed(4)+', '+pop[i][1].toFixed(4),
+        im: i? mi(p,inc[i-1]).toFixed(1)+' mi':'—', pm: i? mi(pop[i],pop[i-1]).toFixed(1)+' mi':'—', gap:g.toFixed(1), g }; });
+    const gmax = Math.max(...rows.map(r=>r.g));
+    rows.forEach(r=>r.gapPct = (r.g/gmax*100).toFixed(1)+'%');
+    const incTotal = mi(inc[0],inc[12]).toFixed(1), popTotal = mi(pop[0],pop[12]).toFixed(1);
+    const gap0 = rows[0].gap, gap1 = rows[12].gap;
+    const finding = `The income center moved ${incTotal} miles north-northwest since 2011; the population center moved ${popTotal} miles. The gap between them grew from ${gap0} to ${gap1} miles.`;
+
+    // ZIP value distribution (placeholder), quantile bins
+    const n = 231, KN = [35,52,63,76,94,125,188];
+    const vals = Array.from({length:n},(_,i)=>{ const t=i/(n-1)*6, j=Math.min(5,Math.floor(t)); return KN[j]+(KN[j+1]-KN[j])*(t-j); });
+    const br = [35,52,63,76,94,125,190];
+    const mkBins = ramp => ramp.map((c,i)=>({ c, lo: k(br[i]), range: k(br[i])+' – '+k(br[i+1]), n: String(Math.round(n/6)) }));
+    const binsA = mkBins(RAMP.a), binsC = mkBins(RAMP.c);
+    const xOf = v => v<=190 ? (Math.log(v/34)/Math.log(190/34))*78 : 84+Math.min(16,(Math.log(v/190)/Math.log(800/190))*16);
+    const outs = [742,468,401,356,288,240,212];
+    const mkTicks = (ramp,out) => vals.map((v,i)=>({ x:xOf(v).toFixed(2)+'%', c: ramp[Math.min(5,Math.floor(i*6/n))] })).concat(outs.map(v=>({x:xOf(v).toFixed(2)+'%',c:out})));
+    const mkSpans = ramp => ramp.map((c,i)=>({ c, lo: String(Math.round(br[i]))+'K', x: xOf(br[i]).toFixed(1)+'%', w: (xOf(br[i+1])-xOf(br[i])-0.3).toFixed(2)+'%' }));
+
+    // sparklines
+    const zs = [132,128,139,141,146,144,150,156,152,149,171,163,158], ma = [101,99,103,105,108,107,110,114,112,111,124,120,118];
+    const spark = (series, w, hgt, col, extra) => {
+      const lo = Math.min(...series.flat())*0.95, hi = Math.max(...series.flat())*1.02;
+      const pts = s => s.map((v,i)=>`${(i/12*w).toFixed(1)},${(hgt-(v-lo)/(hi-lo)*hgt).toFixed(1)}`).join(' ');
+      const kids = series.map((s,j)=>h('polyline',{key:j,points:pts(s),fill:'none',stroke:j===0?col:extra,strokeWidth:j===0?2:1.3,strokeDasharray:j===0?'none':'3 3',vectorEffect:'non-scaling-stroke'}));
+      const last = series[0][12];
+      kids.push(h('circle',{key:'e',cx:w,cy:hgt-(last-lo)/(hi-lo)*hgt,r:3,fill:col}));
+      return h('svg',{viewBox:`-4 -4 ${w+8} ${hgt+8}`,preserveAspectRatio:'none',style:{position:'absolute',inset:0,width:'100%',height:'100%',overflow:'visible'}},kids);
+    };
+    const gapSeries = rows.map(r=>r.g);
+    const gapSpark = (C) => {
+      C = C || { line:'#ff5c8a', fillOp:0.18, base:'#3a3f48', tick:'#6a707b', txt:'#9aa1ad', thumb:'#e7eaf0', font:'IBM Plex Mono, monospace', at:12 };
+      const w=600, hh=44, hi=gmax*1.1, x=i=>i/12*w, y=v=>hh-v/hi*hh;
+      const area = `M0,${hh} ` + gapSeries.map((v,i)=>`L${x(i)},${y(v)}`).join(' ') + ` L${w},${hh} Z`;
+      const kids = [h('path',{key:'a',d:area,fill:C.line,fillOpacity:C.fillOp}), h('polyline',{key:'l',points:gapSeries.map((v,i)=>`${x(i)},${y(v)}`).join(' '),fill:'none',stroke:C.line,strokeWidth:2}),
+        h('line',{key:'b',x1:0,y1:hh,x2:w,y2:hh,stroke:C.base})];
+      gapSeries.forEach((v,i)=>{ kids.push(h('line',{key:'t'+i,x1:x(i),y1:hh,x2:x(i),y2:hh+4,stroke:C.tick}));
+        if (i%3===0) kids.push(h('text',{key:'y'+i,x:x(i),y:hh+15,fontSize:10,fill:C.txt,textAnchor:i===0?'start':'middle',fontFamily:C.font},2011+i)); });
+      kids.push(h('text',{key:'yl',x:w,y:hh+15,fontSize:10,fill:C.txt,textAnchor:'end',fontFamily:C.font},'2023'));
+      const tx = x(C.at);
+      kids.push(h('rect',{key:'th',x:tx-3,y:-2,width:6,height:hh+2,fill:C.thumb}));
+      if (C.at<12) kids.push(h('circle',{key:'tc',cx:tx,cy:y(gapSeries[C.at]),r:4,fill:'#fff',stroke:C.line,strokeWidth:2}));
+      return h('svg',{viewBox:`0 -4 ${w} ${hh+22}`,preserveAspectRatio:'none',style:{position:'absolute',inset:0,width:'100%',height:'100%',overflow:'visible'}},kids);
+    };
+
+    const years = Array.from({length:13},(_,i)=>2011+i);
+    const yearsC = years.map(y=>({ label: y===2011||y===2023 ? String(y) : "'"+String(y).slice(2), w: y===2023?700:500, bg: y===2023?'#2a2622':'transparent', fg: y===2023?'#f7f3ea':'#5c534a' }));
+    const yearsCtail = years.slice(5).map(y=>({ label:String(y), w:y===2023?700:500, bg:y===2023?'#2a2622':'transparent', fg:y===2023?'#f7f3ea':'#5c534a' }));
+
+    const tokenSets = [
+      { id:'1ac', name:'Annual report (from Upchurch)', lightBg:'#ffffff', lightFg:'#000', darkBg:'#000000', darkFg:'#fff',
+        light:['#ffffff','#F7F7F6','#E2E1DE','#000000','#0082FF','#009500'], dark:['#000000','#161514','#2D2C2A','#FFFFFF','#5CACFF','#5CB85C'],
+        type:'Source Serif 4 600 for findings and figures; Inter 400–700 for UI. Radius 0–4px. Hairline 1px borders, no gradients.',
+        css:'--bg:#fff; --bg-panel:#fff; --fg-1:#000; --fg-2:#2D2C2A;\n--fg-3:#6E6C68; --border-1:#E2E1DE; --action:#0082FF;\n--center-income:#000; --center-pop:#009500;\n--font-display:"Source Serif 4"; --font-ui:Inter;\n--radius:0; --space:4px scale (4 8 12 16 24 32 48)\n[data-theme=dark] --bg:#000; --fg-1:#fff;\n  --center-income:#fff; --center-pop:#5CB85C' },
+      { id:'1ad', name:'Data desk', lightBg:'#f6f7f9', lightFg:'#17191d', darkBg:'#17191d', darkFg:'#e7eaf0',
+        light:['#f6f7f9','#ffffff','#d5d9e0','#17191d','#d6245a','#17191d'], dark:['#17191d','#23262c','#3a3f48','#e7eaf0','#ff5c8a','#ffffff'],
+        type:'IBM Plex Sans for UI and findings; IBM Plex Mono for every number, code and coordinate. Radius 4px. Dense 8px grid.',
+        css:'--bg:#f6f7f9; --bg-panel:#fff; --fg-1:#17191d;\n--fg-3:#5d6470; --border-1:#d5d9e0;\n--center-income:#d6245a; --center-pop:#17191d;\n--font-ui:"IBM Plex Sans"; --font-num:"IBM Plex Mono";\n--radius:4px; --row-h:24px\n[data-theme=dark] --bg:#17191d; --bg-panel:#23262c;\n  --fg-1:#e7eaf0; --center-income:#ff5c8a; --center-pop:#fff' },
+      { id:'1ae', name:'Civic atlas', lightBg:'#f7f3ea', lightFg:'#2a2622', darkBg:'#1e1b18', darkFg:'#efe9dd',
+        light:['#f7f3ea','#efe9dd','#d6ccb8','#2a2622','#8a4a1c','#0b5d6b'], dark:['#1e1b18','#2a2622','#4a4238','#efe9dd','#e39a5e','#5fb3c2'],
+        type:'Newsreader 500 for metro names and findings; Public Sans for UI. Radius 6px on floating cards. Paper ground, ink text, rust links.',
+        css:'--bg:#efe9dd; --bg-card:#f7f3ea; --fg-1:#2a2622;\n--fg-3:#5c534a; --border-1:#d6ccb8; --link:#8a4a1c;\n--center-income:#0b5d6b; --center-pop:#2a2622;\n--font-display:Newsreader; --font-ui:"Public Sans";\n--radius:6px\n[data-theme=dark] --bg:#1e1b18; --fg-1:#efe9dd;\n  --center-income:#5fb3c2; --center-pop:#efe9dd' }
+    ];
+    const M = (name,note,sw,out) => ({ name, note, sw, out: out||'transparent', outOp: out?1:0, hex: sw.join(' ') + (out?'  out '+out:'') });
+    const rampSets = [
+      { id:'1f', name:'Single hue per measure · pairs with 1a', measures:[
+        M('Avg income','blues',RAMP.a,'#061f3d'), M('Wealth signal (proxy)','greens',['#e9f4e6','#c5e3bd','#94cb8a','#5fae5a','#2f8a35','#0f6420'],'#032a0c'),
+        M('Share $200K+','purples · equal interval',['#f0edf7','#d6cfe8','#b3a7d4','#8c7bbd','#6751a3','#452c84'])]},
+      { id:'1g', name:'Perceptual multi-hue (viridis family) · pairs with 1b', measures:[
+        M('Avg income','viridis',RAMP.b,'#440154'), M('Wealth signal (proxy)','magma, light end',['#fcfdbf','#feca8d','#fd9668','#f1605d','#cd4071','#9e2f7f'],'#3b0f70'),
+        M('Share $200K+','cividis · equal interval',['#fee838','#d3c164','#a69d75','#7f7c75','#5b5c6e','#35456c'])]},
+      { id:'1h', name:'Warm earth · pairs with 1c', measures:[
+        M('Avg income','yellow-orange-brown',RAMP.c,'#4f1a04'), M('Wealth signal (proxy)','peach-rose',['#fff0d6','#fcd0a1','#f7a57a','#ea7562','#cc4a57','#9b2a51'],'#4b0b2e'),
+        M('Share $200K+','yellow-green-blue · equal interval',['#f4f7cf','#d2e8b4','#9fd1b4','#65b4b8','#3b8cae','#26609b'])]}
+    ];
+    const metros = METROS.map((m,i)=>({ rank:String(i+1), name:m, bg:i===3?'#2a2622':'transparent', fg:i===3?'#f7f3ea':'#2a2622' }));
+    const sanResults = [['13','San Francisco–Oakland–Berkeley','CA'],['18','San Diego–Chula Vista–Carlsbad','CA'],['24','San Antonio–New Braunfels','TX'],['36','San Jose–Sunnyvale–Santa Clara','CA']]
+      .map((r,i)=>({ rank:r[0], name:r[1], st:r[2], bg:i===0?'#000':'#fff', fg:i===0?'#fff':'#000' }));
+    const notes = [
+      { t:'ZIP ≠ ZCTA', d:'IRS reports by USPS ZIP; the map draws Census ZCTAs. PO-box and single-building ZIPs have returns but no polygon. The design assumes they are dropped from the choropleth; decide whether they still count toward centers (they need a point location).' },
+      { t:'A point per ZIP', d:'Centers need one coordinate per ZIP. The trails assume a fixed population-weighted internal point per ZCTA. A geometric centroid can fall in a lake or airport and will shift results.' },
+      { t:'Changing geography', d:'ZCTAs were redrawn in 2020 and CBSAs were redelineated in 2013 and 2023. The design assumes one fixed ZCTA vintage and one fixed CBSA definition across all years; otherwise part of the center movement is boundary change.' },
+      { t:'"Population" is returns', d:'The population center is weighted by number of returns, not residents. Label it "tax filers" or "returns" wherever space allows. Non-filers, and areas with many joint filers, are under-represented.' },
+      { t:'Suppression changes by year', d:'A ZIP near the threshold can flicker between data and no data during playback. Recommend holding the ZIP universe fixed (drop any ZIP suppressed in any year from centers) and noting the count.' },
+      { t:'Mean, not median', d:'Average income per return is pulled up by a few very high earners. There is no ZIP-level median in this data; the ZIP card says "average" every time.' },
+      { t:'Wealth is a proxy', d:'Capital income tracks assets only loosely and swings with markets (capital gains spiked in 2021). Consider a 3-year rolling average for this measure so playback does not jump. Always labeled "wealth signal", never net worth.' },
+      { t:'$200K+ share', d:'Based on the IRS AGI size class of $200K and over, which is in nominal dollars. That threshold is not inflation-adjusted, so the share rises partly from inflation. Say so in the legend note.' },
+      { t:'Inflation adjustment', d:'Design shows "2023 dollars". Pick one deflator (CPI-U is the common choice) and one base year; the label must match.' },
+      { t:'Noise vs. movement', d:'Year-to-year moves of a few tenths of a mile may be noise. The data has no uncertainty estimates; the finding sentence uses the 2011→latest change and a compass direction from the bearing, not a trend fit.' },
+      { t:'Names are extra data', d:'Place names ("Plano (west)"), outlier neighborhood names, and landmarks are not in the IRS files. They need a ZIP-to-place crosswalk plus a hand-curated landmark list (about 5 per metro × 50).' },
+      { t:'Latest year lag', d:'IRS ZIP data runs about two years behind. Copy says "latest year" and reads the year from the data rather than hardcoding 2023.' }
+    ];
+    return {
+      finding, gap0, gap1, incTotal, popTotal,
+      rows, rowsRev: rows.slice().reverse(), rowsShort: rows.slice(8).reverse(), rowsA: rows.slice(12), rowsB: rows.slice(6).reverse(),
+      binsA, binsC, binsArev: binsA.slice().reverse(), binsCrev: binsC.slice().reverse(),
+      ticksA: mkTicks(RAMP.a,'#061f3d'), ticksB: mkTicks(RAMP.b,'#c77dff'), binSpansA: mkSpans(RAMP.a), binSpansB: mkSpans(RAMP.b),
+      sparkA: spark([zs],120,30,'#000'), sparkB: spark([zs],120,30,'#ff5c8a'), sparkC: spark([zs,ma],240,50,'#a8430e','#5c534a'),
+      gapSparkB: gapSpark(),
+      gapSparkA: gapSpark({ line:'#000', fillOp:0.06, base:'#000', tick:'#9C9A95', txt:'#4A4845', thumb:'#0082FF', font:'Inter, sans-serif', at:6 }),
+      gapSparkA12: gapSpark({ line:'#000', fillOp:0.06, base:'#000', tick:'#9C9A95', txt:'#4A4845', thumb:'#0082FF', font:'Inter, sans-serif', at:12 }),
+      sparkAC: spark([zs,ma],240,50,'#000','#6E6C68'),
+      binsAD: ['#0f2a4a','#12427a','#1a5fae','#2f7fd9','#5ca6f0','#a9d2ff'].map((c,i)=>({ c, lo: binsA[i].lo })),
+      metrosA: METROS.map((m,i)=>({ rank:String(i+1), name:m, bg:i===3?'#000':'transparent', fg:i===3?'#fff':'#2D2C2A' })),
+      years, yearsC, yearsCtail, tokenSets, rampSets, metros, sanResults, notes
+    };
+  }
+}
+</script>
+</body>
+</html>
