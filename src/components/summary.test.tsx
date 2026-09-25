@@ -126,6 +126,27 @@ describe('US benchmark', () => {
   })
 })
 
+describe('Metro vs US view', () => {
+  it('proportional path grows the first-year metro value at the US rate', async () => {
+    const { proportionalPath } = await import('./TrendChart')
+    expect(proportionalPath([100, 120, 150], [50, 55, 60])).toEqual([100, 110, 120])
+    expect(proportionalPath([null, 1], [1, 2])).toEqual([null, null])
+  })
+  it('toggle shows a keyboard-accessible point per year and the proportional comparison', async () => {
+    const vals = mf.years.map((_, i) => 70000 + i * 2500)
+    render(<TrendChart years={mf.years} values={vals} benchmark={mf.us.avgIncome} year={2018} dollarYear={last} onYear={() => {}} />)
+    await userEvent.click(screen.getByRole('radio', { name: 'Metro vs US' }))
+    const pts = screen.getAllByRole('button', { name: /metro \$.*, US \$.*, at US growth \$/ })
+    expect(pts).toHaveLength(mf.years.length)
+    expect(screen.getByText(/(above|below) the US-growth path|On pace with the US/)).toBeTruthy()
+    expect(screen.getByRole('columnheader', { name: 'Metro at US growth rate', hidden: true })).toBeTruthy()
+  })
+  it('no toggle without a benchmark', () => {
+    render(<TrendChart years={mf.years} values={mf.years.map(() => 1)} year={last} dollarYear={last} onYear={() => {}} />)
+    expect(screen.queryByRole('radio', { name: 'Metro vs US' })).toBeNull()
+  })
+})
+
 describe('MetroStats', () => {
   it('labels rank direction and shows the base-year state', () => {
     const t = mf.metros.find((m) => m.id === '45300')!

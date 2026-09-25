@@ -353,3 +353,13 @@ html, body { overflow: hidden; overscroll-behavior: none; }
 .trend-key i { display: inline-block; width: 18px; height: 0; border-top: 2px solid var(--center-income); }
 .trend-key i.k-us { border-top: 1.5px dashed var(--fg-4); }
 .tip-us { opacity: .75; }
+.trend-mode { margin-top: 2px; }
+.vsus .vs-grid { stroke: var(--border-1); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.vsus .vs-label { font: 600 9px var(--font-ui); fill: var(--fg-4); letter-spacing: .06em; text-transform: uppercase; }
+.vsus .vs-prop { stroke: var(--fg-3); stroke-width: 1.5; stroke-dasharray: 0.5 3.5; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.vsus .vs-tail { stroke: var(--center-income); stroke-linecap: round; }
+.vsus .trend-pt circle.vs-hit, .vsus .trend-pt.sel circle.vs-hit { fill: transparent; stroke: none; }
+.vs-pt.future circle:not(.vs-hit) { opacity: .25; }
+.vsus .vs-year { font: 700 10px var(--font-ui); fill: var(--fg-2); paint-order: stroke; stroke: var(--bg); stroke-width: 3px; }
+.vs-note { margin: 0; font-size: var(--fs-11); color: var(--fg-4); }
+.trend-key i.k-prop { border-top: 2px dotted var(--fg-3); }
