@@ -6,6 +6,8 @@ import { mapColors, rampColors, type Theme } from '../lib/theme'
 import { binOf, spreadRamp } from '../lib/bins'
 import type { CenterPoint, CenterToggles, Measure, MetroData, MetroMeta } from '../lib/types'
 import { fmtMi } from '../lib/format'
+import { changeBinOf, type ChangeLayer, type MapView as MapViewMode } from '../lib/change'
+import { cssVar } from '../lib/theme'
 import { haversineMi } from '../lib/geo'
 
 export interface BeadHover { kind: string; year: number; lat: number; lon: number; moved: number | null; x: number; y: number }
@@ -28,6 +30,9 @@ interface Props {
   ariaLabel: string
   zoomToCenters: number          // increment to fly to the centers
   padding: { top: number; bottom: number; left: number; right: number }
+  /** Change view: diverging classes around the metro's change (null = level view). */
+  change: ChangeLayer | null
+  view: MapViewMode
 }
 
 type Kind = 'income' | 'pop' | 'aboveAvg'
@@ -187,7 +192,7 @@ export default function MapView(p: Props) {
     map.on('zoom', f)
     return () => { map.off('zoom', f) }
   }, [])
-  useEffect(() => { if (ready.current) pushChoropleth() }, [p.data, p.geo, p.measure, p.year, p.highlightBin, p.theme]) // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { if (ready.current) pushChoropleth() }, [p.data, p.geo, p.measure, p.year, p.highlightBin, p.theme, p.view, p.change]) // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { if (ready.current) pushHighlight() }, [p.hoverZip, p.pinnedZip, p.geo]) // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { if (ready.current) pushCenters(true) }, [p.data, p.year, p.toggles]) // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { if (ready.current) pushCbd() }, [p.toggles.cbd, p.metro.id]) // eslint-disable-line react-hooks/exhaustive-deps
@@ -222,8 +227,21 @@ export default function MapView(p: Props) {
 
   function pushChoropleth() {
     const map = mapRef.current!
-    const { data, geo, measure, year, highlightBin } = props.current
+    const { data, geo, measure, year, highlightBin, view, change } = props.current
     if (!data || !geo) return
+    if (view === 'change') {
+      // 7 diverging classes; index 7 (the "outlier" slot) is unused here.
+      const div = [1, 2, 3, 4, 5, 6, 7].map((i) => cssVar(`--div-${i}`))
+      map.setPaintProperty('zcta-fill', 'fill-color', fillColorExpr(div, div[6]))
+      map.setPaintProperty('zcta-fill', 'fill-opacity', fillOpacityExpr(mapColors().choroOpacity, 99))
+      for (const f of geo.features) {
+        const z = f.properties!.zcta as string
+        // base year: nothing has changed yet, so every ZIP with data sits in the neutral class
+        const bi = change ? changeBinOf(change.byZip.get(z) ?? null, change.bins) : (data.zips[z]?.[measure][0] != null ? 3 : -1)
+        map.setFeatureState({ source: 'zcta', id: z }, { b: bi, out: false, dim: highlightBin != null && bi !== highlightBin })
+      }
+      return
+    }
     const b = data.bins[measure]
     const n = b.breaks.length
     const { ramp, outlier } = rampColors(measure)

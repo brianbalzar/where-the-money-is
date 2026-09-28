@@ -2,6 +2,7 @@ import type { CSSProperties } from 'react'
 import type { Measure, MetroData } from '../lib/types'
 import { binOf, spreadIdx } from '../lib/bins'
 import { fmtInt, fmtValue, measureCaption } from '../lib/format'
+import { CHANGE_TITLE, fmtChange, type ChangeLayer, type MapView as MapViewMode } from '../lib/change'
 
 const RAMP_KEY: Record<Measure, string> = { income: 'income', wealth: 'wealth', share200k: 'share' }
 
@@ -45,9 +46,11 @@ interface Props {
   mode: 'hover' | 'pinned'
   onUnpin?: () => void
   style?: CSSProperties
+  view?: MapViewMode
+  change?: ChangeLayer | null
 }
 
-export default function ZipCard({ data, zip, measure, year, mode, onUnpin, style }: Props) {
+export default function ZipCard({ data, zip, measure, year, mode, onUnpin, style, view = 'level', change = null }: Props) {
   const row = data.zips[zip]
   const yi = data.years.indexOf(year)
   const v = row?.[measure][yi] ?? null
@@ -94,10 +97,24 @@ export default function ZipCard({ data, zip, measure, year, mode, onUnpin, style
         <span className="zc-zip">{zip}</span><span className="zc-place">{place}</span>
         {mode === 'pinned' && <button type="button" className="unpin" onClick={onUnpin}>Unpin</button>}
       </div>
-      <div>
-        <div className="zc-value">{fmtValue(measure, v)}</div>
-        <div className="zc-cap">{measureCaption(measure, year)}</div>
-      </div>
+      {view === 'change' && yi > 0 ? (() => {
+        const c = change?.byZip.get(zip) ?? null
+        const first = data.years[0]
+        return (
+          <div>
+            <div className="zc-change">{c != null ? fmtChange(measure, c) : '—'}</div>
+            <div className="zc-cap">{CHANGE_TITLE[measure]}, {first}–{year}</div>
+            <div className="zc-cap">
+              {c == null ? `No ${first} value to compare` : <>Metro {fmtChange(measure, change!.metro)} · now {fmtValue(measure, v)}</>}
+            </div>
+          </div>
+        )
+      })() : (
+        <div>
+          <div className="zc-value">{fmtValue(measure, v)}</div>
+          <div className="zc-cap">{measureCaption(measure, year)}</div>
+        </div>
+      )}
       {mode === 'pinned' && (
         <div className="zc-bin">
           <span className="sw" style={{ background: swatch }} />

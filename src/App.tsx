@@ -12,6 +12,8 @@ import CenterInset from './components/CenterInset'
 import MetroStats from './components/MetroStats'
 import TrendChart from './components/TrendChart'
 import SeparationPanel from './components/SeparationPanel'
+import ChangeLegend from './components/ChangeLegend'
+import { changeLayer, type MapView as MapViewMode } from './lib/change'
 import type { CenterToggles, Measure, MetroData, MetrosFile } from './lib/types'
 import { MEASURES } from './lib/types'
 import { MEASURE_LABEL, fmtCoord, fmtMi } from './lib/format'
@@ -31,6 +33,7 @@ function readUrl() {
     year: q.get('year') ? Number(q.get('year')) : null,
     zip: q.get('zip'),
     page: q.get('page'),
+    view: (q.get('view') === 'change' ? 'change' : 'level') as MapViewMode,
   }
 }
 
@@ -60,6 +63,7 @@ export default function App() {
   const [metros, setMetros] = useState<MetrosFile | null>(null)
   const [metroId, setMetroId] = useState(init.metro)
   const [measure, setMeasure] = useState<Measure>(init.measure)
+  const [view, setView] = useState<MapViewMode>(init.view)
   const [year, setYear] = useState<number | null>(init.year)
   const [playing, setPlaying] = useState(false)
   const [toggles, setToggles] = useState<CenterToggles>({ income: true, pop: true, aboveAvg: false, cbd: true })
@@ -110,10 +114,13 @@ export default function App() {
     return () => { live = false }
   }, [metro?.id]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  useEffect(() => { setLockBin(null); setHlBin(null) }, [measure, metro?.id])
+  useEffect(() => { setLockBin(null); setHlBin(null) }, [measure, metro?.id, view])
 
   const years = data?.years ?? metros?.years ?? []
   const curYear = year ?? years[years.length - 1] ?? 2022
+  const change = useMemo(
+    () => (view === 'change' && data ? changeLayer(data, measure, Math.max(0, data.years.indexOf(curYear))) : null),
+    [view, data, measure, curYear])
 
   // ---------- URL sync ----------
   useEffect(() => {
@@ -122,10 +129,11 @@ export default function App() {
     q.set('metro', metro.id)
     q.set('measure', measure)
     q.set('year', String(curYear))
+    if (view === 'change') q.set('view', 'change')
     if (pinned) q.set('zip', pinned)
     if (page === 'method') q.set('page', 'methodology')
     history.replaceState(null, '', `${location.pathname}?${q}`)
-  }, [metro, measure, curYear, pinned, page])
+  }, [metro, measure, curYear, pinned, page, view])
 
   // ---------- metro stepping ----------
   const sorted = useMemo(() => (metros ? [...metros.metros].sort((a, b) => a.rank - b.rank) : []), [metros])
@@ -208,6 +216,7 @@ export default function App() {
       onBeadHover={setBead}
       ariaLabel={`Map of ${metro.name}. ${finding}`}
       zoomToCenters={zoomReq}
+      view={view} change={change}
       padding={mobile ? { top: 24, bottom: 388, left: 16, right: 16 } : { top: 40, bottom: 130, left: narrow ? 160 : 290, right: 70 }}
     />
   )
@@ -220,7 +229,14 @@ export default function App() {
     </div>
   )
 
-  const measureNote = measure !== 'income' && (
+  const viewCtl = (
+    <div className="seg seg-sm seg-view-toggle" role="radiogroup" aria-label="Map shows">
+      <button type="button" role="radio" aria-checked={view === 'level'} className={view === 'level' ? 'on' : ''} onClick={() => setView('level')}>Level</button>
+      <button type="button" role="radio" aria-checked={view === 'change'} className={view === 'change' ? 'on' : ''} onClick={() => setView('change')}>Change since {years[0] ?? 2011}</button>
+    </div>
+  )
+
+  const measureNote = measure !== 'income' && view === 'level' && (
     <p className="measure-note">Colors show {measure === 'wealth' ? 'capital income per return' : 'the share of returns over $200K'}. The centers and the headline always use total income and tax returns.</p>
   )
 
@@ -251,7 +267,7 @@ export default function App() {
 
   const hoverCard = hover && data && !pinned && (
     <HoverPos x={hover.x} y={hover.y}>
-      <ZipCard data={data} zip={hover.zip} measure={measure} year={curYear} mode="hover" />
+      <ZipCard data={data} zip={hover.zip} measure={measure} year={curYear} mode="hover" view={view} change={change} />
     </HoverPos>
   )
 
@@ -279,7 +295,7 @@ export default function App() {
         <BottomSheet sheet={sheet} setSheet={setSheet}>
           {pinned && data ? (
             <div className="sheet-card">
-              <ZipCard data={data} zip={pinned} measure={measure} year={curYear} mode="pinned" onUnpin={() => setPinned(null)} />
+              <ZipCard data={data} zip={pinned} measure={measure} year={curYear} mode="pinned" onUnpin={() => setPinned(null)} view={view} change={change} />
             </div>
           ) : (
             <>
@@ -289,6 +305,7 @@ export default function App() {
                 <>
                   <YearControl years={years} year={curYear} playing={playing} onYear={(y) => { setPlaying(false); setYear(y) }} onPlay={togglePlay} compact />
                   {measureCtl}
+                  {viewCtl}
                   {measureNote}
                   {sheet === 'peek' && <p className="hint">Swipe up for legend, table, method</p>}
                 </>
@@ -299,7 +316,9 @@ export default function App() {
                   {stats}
                   {trend}
                   {centerToggles}
-                  <Legend measure={measure} data={data} year={curYear} onHoverBin={setHlBin} locked={lockBin} onLock={setLockBin} variant="list" />
+                  {view === 'change'
+                    ? <ChangeLegend measure={measure} data={data} year={curYear} change={change} onHoverBin={setHlBin} locked={lockBin} onLock={setLockBin} variant="list" />
+                    : <Legend measure={measure} data={data} year={curYear} onHoverBin={setHlBin} locked={lockBin} onLock={setLockBin} variant="list" />}
                   {separation}
                   <div className="eyebrow">Centers by year</div>
                   <SummaryTable data={data} metro={metro} variant="compact" order="desc" limit={5} onAll={() => setTableOpen(true)} />
@@ -338,13 +357,15 @@ export default function App() {
           )}
         </section>
         <section className="p-measure">
-          <span className="eyebrow">Map measure</span>
+          <div className="measure-head"><span className="eyebrow">Map measure</span>{viewCtl}</div>
           {measureCtl}
           {measureNote}
           {centerToggles}
         </section>
         <section className="p-legend">
-          {data && <Legend measure={measure} data={data} year={curYear} onHoverBin={setHlBin} locked={lockBin} onLock={setLockBin} />}
+          {data && (view === 'change'
+            ? <ChangeLegend measure={measure} data={data} year={curYear} change={change} onHoverBin={setHlBin} locked={lockBin} onLock={setLockBin} />
+            : <Legend measure={measure} data={data} year={curYear} onHoverBin={setHlBin} locked={lockBin} onLock={setLockBin} />)}
         </section>
         <section className="p-trend">{trend}</section>
         <section className="p-sep">{separation}</section>
@@ -364,7 +385,7 @@ export default function App() {
         {data && <CenterInset data={data} year={curYear} toggles={toggles} onZoom={() => setZoomReq((n) => n + 1)} size={narrow ? 112 : 232} compact={narrow} />}
         {pinned && data && (
           <div className="pinned-float">
-            <ZipCard data={data} zip={pinned} measure={measure} year={curYear} mode="pinned" onUnpin={() => setPinned(null)} />
+            <ZipCard data={data} zip={pinned} measure={measure} year={curYear} mode="pinned" onUnpin={() => setPinned(null)} view={view} change={change} />
           </div>
         )}
         {hoverCard}

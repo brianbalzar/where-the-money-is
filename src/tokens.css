@@ -55,6 +55,11 @@
   --ramp-share-4: #8C7BBD; --ramp-share-5: #6751A3; --ramp-share-6: #452C84;
   /* share-200K has no outlier bin */
 
+  /* Diverging (change view): orange = slower than the metro, purple = faster, gray = about the same.
+     PuOr family: colourblind-safe, and distinct from the three level ramps. */
+  --div-1: #B35806; --div-2: #E08214; --div-3: #FDB863; --div-4: #E4E2DE;
+  --div-5: #B2ABD2; --div-6: #8073AC; --div-7: #542788;
+
   /* Type */
   --font-ui: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
   --font-display: "Source Serif 4", Georgia, serif;
@@ -100,4 +105,6 @@
   --ramp-wealth-out: #F0FBEC;
   --ramp-share-1: #1F1739; --ramp-share-2: #2F2361; --ramp-share-3: #473790;
   --ramp-share-4: #6B59B9; --ramp-share-5: #9B8CD9; --ramp-share-6: #D1C8F3;
+  --div-1: #E08A2E; --div-2: #B8661A; --div-3: #7A4A1C; --div-4: #34322F;
+  --div-5: #4D3F7A; --div-6: #7B6BC0; --div-7: #B3A5F0;
 }

@@ -195,6 +195,18 @@ describe('App', () => {
     expect(screen.getByRole('checkbox', { name: /Downtown \(CBD\)/ })).toBeChecked()
   })
 
+  it('desktop: the Level / Change toggle recolours the legend and is kept in the URL', async () => {
+    stubBrowser(false)
+    history.replaceState(null, '', '/?metro=19100&year=2022')
+    const { default: App } = await import('../App')
+    render(<App />)
+    await screen.findByText(/Average income per return, 2022/i)
+    await act(async () => { fireEvent.click(within(screen.getByRole('radiogroup', { name: 'Map shows' })).getByRole('radio', { name: /Change since 2011/ })) })
+    expect(await screen.findByText(/Real change in average income, 2011–2022/)).toBeTruthy()
+    expect(new URLSearchParams(location.search).get('view')).toBe('change')
+    expect(screen.getByText(/Colored relative to the metro/)).toBeTruthy()
+  })
+
   it('mobile: collapsed sheet stays concise; expanded sheet has stats, trend and ranking', async () => {
     stubBrowser(true)
     history.replaceState(null, '', '/?metro=33460')
