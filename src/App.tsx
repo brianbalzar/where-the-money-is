@@ -66,7 +66,7 @@ export default function App() {
   const [view, setView] = useState<MapViewMode>(init.view)
   const [year, setYear] = useState<number | null>(init.year)
   const [playing, setPlaying] = useState(false)
-  const [toggles, setToggles] = useState<CenterToggles>({ income: true, pop: true, aboveAvg: false, cbd: true })
+  const [toggles, setToggles] = useState<CenterToggles>({ income: true, pop: true, aboveAvg: false, cbd: true, counties: true })
   const [hover, setHover] = useState<{ zip: string; x: number; y: number } | null>(null)
   const [pinned, setPinned] = useState<string | null>(init.zip)
   const [bead, setBead] = useState<BeadHover | null>(null)
@@ -81,6 +81,7 @@ export default function App() {
   const [sheet, setSheet] = useState<Sheet>('peek')
   const [data, setData] = useState<MetroData | null>(null)
   const [geo, setGeo] = useState<GeoJSON.FeatureCollection | null>(null)
+  const [counties, setCounties] = useState<GeoJSON.FeatureCollection | null>(null)
   const [err, setErr] = useState<string | null>(null)
   const [zoomReq, setZoomReq] = useState(0)
   const mobile = useMedia('(max-width: 767px)')
@@ -102,7 +103,9 @@ export default function App() {
   useEffect(() => {
     if (!metro) return
     let live = true
-    setData(null); setGeo(null); setHover(null)
+    setData(null); setGeo(null); setHover(null); setCounties(null)
+    // county outlines are optional: a missing file just means no lines
+    fetch(`${BASE}data/${metro.id}/counties.geojson`).then((r) => (r.ok ? r.json() : null)).then((c) => live && setCounties(c)).catch(() => {})
     Promise.all([
       fetch(`${BASE}data/${metro.id}/data.json`).then((r) => r.json()),
       fetch(`${BASE}data/${metro.id}/zctas.geojson`).then((r) => r.json()),
@@ -209,7 +212,7 @@ export default function App() {
 
   const map = (
     <MapView
-      metro={metro} data={data} geo={geo} measure={measure} year={curYear} toggles={toggles}
+      metro={metro} data={data} geo={geo} counties={counties} measure={measure} year={curYear} toggles={toggles}
       hoverZip={hover?.zip ?? null} pinnedZip={pinned} highlightBin={hlBin ?? lockBin} theme={theme} reducedMotion={reducedMotion}
       onHoverZip={(z, pt) => setHover(z && pt && !mobile ? { zip: z, ...pt } : null)}
       onClickZip={(z) => { setPinned(z); if (z && mobile) setSheet('peek') }}
@@ -242,7 +245,7 @@ export default function App() {
 
   const centerToggles = (
     <div className="toggles">
-      {([['income', 'Income center'], ['pop', 'Population center'], ['aboveAvg', 'Above-average income'], ['cbd', 'Downtown (CBD)']] as const).map(([k, label]) => (
+      {([['income', 'Income center'], ['pop', 'Population center'], ['aboveAvg', 'Above-average income'], ['cbd', 'Downtown (CBD)'], ['counties', 'County lines']] as const).map(([k, label]) => (
         <label key={k} className={`tg tg-${k}${toggles[k] ? '' : ' off'}`}>
           <input type="checkbox" checked={toggles[k]} onChange={(e) => setToggles({ ...toggles, [k]: e.target.checked })} />
           <span className="tg-mark" aria-hidden />{label}

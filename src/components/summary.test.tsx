@@ -19,8 +19,9 @@ const ranked = rankGap(mf, mf.years.length - 1)
 afterEach(cleanup)
 
 describe('SeparationPanel', () => {
-  it.each([1, 2, 49, 50])('rank position %i: current marked with aria-current, neighbours clickable', async (pos) => {
-    const me = ranked[pos - 1].item
+  it.each([1, 2, 'N-1', 'N'])('rank position %s: current marked with aria-current, neighbours clickable', async (pos) => {
+    const idx = pos === 'N' ? ranked.length - 1 : pos === 'N-1' ? ranked.length - 2 : (pos as number) - 1
+    const me = ranked[idx].item
     const onSelect = vi.fn()
     render(<SeparationPanel mf={mf} metro={me} year={last} onSelect={onSelect} />)
     const list = screen.getByRole('list', { name: /ranked by current gap/i })
@@ -110,7 +111,7 @@ describe('US benchmark', () => {
     expect(mf.us.avgIncome).toHaveLength(mf.years.length)
     const us = mf.us.avgIncome[mf.years.length - 1]
     expect(us).toBeGreaterThan(80000); expect(us).toBeLessThan(110000) // sanity band, 2022 dollars
-    // the US figure includes suppressed ZIPs, so it covers more returns than the 50 metros combined
+    // the US figure includes suppressed ZIPs, so it covers more returns than the top metros combined
     const metroReturns = mf.metros.reduce((a, m) => a + m.summary.returns[mf.years.length - 1], 0)
     expect(mf.us.returns[mf.years.length - 1]).toBeGreaterThan(metroReturns)
   })

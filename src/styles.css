@@ -379,3 +379,4 @@ html, body { overflow: hidden; overscroll-behavior: none; }
 .measure-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
 .measure-head .seg { flex: none; }
 .zc-change { font: 600 var(--fs-26)/1.1 var(--font-display); color: var(--fg-1); font-variant-numeric: tabular-nums; }
+.tg-counties .tg-mark { width: 14px; height: 0; border-top: 1.5px dashed var(--map-label); opacity: .8; }

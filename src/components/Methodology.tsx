@@ -11,7 +11,7 @@ export default function Methodology({ years, dollarYear, onClose }: Props) {
         </div>
         <h1 id="method-h">Methodology</h1>
         <p>
-          This site locates the <em>center of income</em> for each of the 50 largest US metro areas, every year from {first} to {last},
+          This site locates the <em>center of income</em> for each of the 100 largest US metro areas, every year from {first} to {last},
           and compares it with the <em>center of population</em>. The distance between the two is the headline: it shows where
           money is concentrated relative to where people file taxes, and whether that is shifting.
         </p>

@@ -82,4 +82,4 @@ export interface MetroData {
   suppressedZips: string[]      // ZCTAs on the map with no value in the latest year
 }
 
-export interface CenterToggles { income: boolean; pop: boolean; aboveAvg: boolean; cbd: boolean }
+export interface CenterToggles { income: boolean; pop: boolean; aboveAvg: boolean; cbd: boolean; counties: boolean }

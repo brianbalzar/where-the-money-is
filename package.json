@@ -1,7 +1,7 @@
 {
   "name": "where-the-money-is",
   "version": "1.0.0",
-  "description": "Centers of income in the 50 largest US metros",
+  "description": "Centers of income in the 100 largest US metros",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",

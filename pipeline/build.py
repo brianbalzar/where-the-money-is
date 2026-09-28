@@ -76,6 +76,22 @@ def load_bg() -> pd.DataFrame:
     bg = pd.read_csv(C.RAW / "CenPop2020_Mean_BG.txt", dtype={"STATEFP": str, "COUNTYFP": str}, encoding="utf-8-sig")
     bg.columns = [c.strip().upper() for c in bg.columns]
     bg["county"] = bg["STATEFP"].str.zfill(2) + bg["COUNTYFP"].str.zfill(3)
+    # Connecticut: the 2023 metro definitions use planning regions (09110-09190) instead of
+    # the old counties the 2020 files carry. Re-assign CT block groups by location.
+    cf = C.RAW / "cb_2023_us_county_500k.zip"
+    ct = bg["STATEFP"].str.zfill(2) == "09"
+    if ct.any():
+        if not cf.exists():
+            print("  ! cb_2023_us_county_500k.zip missing: Connecticut metros will be skipped")
+        else:
+            cty = gpd.read_file(f"zip://{cf}")
+            cty = cty[cty["STATEFP"] == "09"][["GEOID", "geometry"]].to_crs(4326)
+            p = gpd.GeoDataFrame(bg.loc[ct, ["LONGITUDE", "LATITUDE"]],
+                                 geometry=gpd.points_from_xy(bg.loc[ct, "LONGITUDE"], bg.loc[ct, "LATITUDE"]), crs=4326)
+            j = gpd.sjoin_nearest(p.to_crs(5070), cty.to_crs(5070), how="left")
+            j = j[~j.index.duplicated()]
+            bg.loc[ct, "county"] = j["GEOID"].values
+            print(f"  Connecticut: {ct.sum():,} block groups re-assigned to {j['GEOID'].nunique()} planning regions")
     return bg[["county", "POPULATION", "LATITUDE", "LONGITUDE"]].rename(
         columns={"POPULATION": "pop", "LATITUDE": "lat", "LONGITUDE": "lon"})
 
@@ -392,6 +408,32 @@ def short_name(cbsa: str, title: str) -> str:
     return "–".join(cities[:2])
 
 
+_COUNTIES: gpd.GeoDataFrame | None = None
+
+
+def write_counties(cbsa: str, deln_rows: pd.DataFrame) -> None:
+    """Outline of each county in the metro (2023 boundaries, so Connecticut planning regions work)."""
+    global _COUNTIES
+    cf = C.RAW / "cb_2023_us_county_500k.zip"
+    if not cf.exists():
+        return
+    if _COUNTIES is None:
+        _COUNTIES = gpd.read_file(f"zip://{cf}")[["GEOID", "NAME", "NAMELSAD", "STUSPS", "geometry"]].to_crs(4326)
+    c = _COUNTIES[_COUNTIES["GEOID"].isin(set(deln_rows["county"]))].copy().reset_index(drop=True)
+    if c.empty:
+        return
+    c["geometry"] = shapely.set_precision(shapely.coverage_simplify(c.geometry.values, tolerance=C.SIMPLIFY_TOL * 1.5), 1e-4)
+    multi_state = c["STUSPS"].nunique() > 1
+    def label(r):
+        n = r["NAMELSAD"].replace(" County", " Co.").replace(" Planning Region", " Region").replace(" Parish", " Par.")
+        return f"{n}, {r['STUSPS']}" if multi_state else n
+    c["name"] = c.apply(label, axis=1)
+    gj = json.loads(c[["GEOID", "name", "geometry"]].rename(columns={"GEOID": "id"}).to_json(drop_id=True))
+    for f in gj["features"]:
+        f["geometry"] = _round_geom(f["geometry"])
+    (C.OUT / cbsa / "counties.geojson").write_text(json.dumps(gj, separators=(",", ":")))
+
+
 def check_cbd(cbsa: str, zcta: gpd.GeoDataFrame) -> dict | None:
     """Return the configured CBD, after checking it sits in (or within 0.5 mi of) its named ZIP."""
     c = C.CBD.get(cbsa)
@@ -565,6 +607,7 @@ def main(argv: list[str]) -> None:
             continue
         print(f"[{meta['rank']:>2}] {title}: {len(mz)} ZCTAs")
         res = build_metro(cbsa, mz, zcta, agg, years, deflate, name_map)
+        write_counties(cbsa, d)
         lms = C.LANDMARKS.get(cbsa) or auto_landmarks(title, mz, name_map)
         cbd = check_cbd(cbsa, zcta)
         if cbd:  # drop a landmark that is the same place as the CBD marker
@@ -687,7 +730,14 @@ def build_metro(cbsa, mz, zcta, agg, years, deflate, name_map) -> dict:
     size = (out_dir / "zctas.geojson").stat().st_size / 1e6
     print(f"   geojson {size:.2f} MB, data {(out_dir / 'data.json').stat().st_size / 1e6:.2f} MB")
 
-    b = g.total_bounds
+    # Frame the map on the ZCTAs holding 99.5% of residents, nearest the population centre
+    # first, so remote islands or empty desert (Honolulu County's Northwestern Islands,
+    # Riverside's east end) don't zoom the whole metro out. Every ZCTA is still drawn.
+    pc = weighted_center(mz["lat"].values, mz["lon"].values, mz["pop"].values.astype(float))
+    order = mz.assign(d=[haversine_mi(pc[0], pc[1], a, o) for a, o in zip(mz["lat"], mz["lon"])]).sort_values("d")
+    cum = order["pop"].cumsum() / max(1, order["pop"].sum())
+    keep = set(order.loc[cum <= 0.995, "zcta"]) | set(order["zcta"].head(1))
+    b = g[g["zcta"].isin(keep)].total_bounds
     # Per-year metro summary, used for cross-metro rankings in the sidebar.
     summary = {
         "avgIncome": metro_avg["income"],

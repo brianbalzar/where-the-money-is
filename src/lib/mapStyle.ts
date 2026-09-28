@@ -83,6 +83,18 @@ export function buildStyle(c: MapColors, dark: boolean): StyleSpecification {
       },
     },
 
+    // ---- county outlines: hairline, above the fill, below water/roads ----
+    {
+      id: 'county-casing', type: 'line', source: 'counties',
+      layout: { 'line-join': 'round' },
+      paint: { 'line-color': c.halo, 'line-width': ['interpolate', ['linear'], ['zoom'], 7, 1.6, 11, 3] as ExpressionSpecification, 'line-opacity': 0.5 },
+    },
+    {
+      id: 'county-line', type: 'line', source: 'counties',
+      layout: { 'line-join': 'round' },
+      paint: { 'line-color': c.label, 'line-width': ['interpolate', ['linear'], ['zoom'], 7, 0.6, 11, 1.2] as ExpressionSpecification, 'line-opacity': 0.55, 'line-dasharray': [4, 2] },
+    },
+
     // ---- water + roads re-drawn above the fill ----
     { id: 'water-over', type: 'fill', source: 'omt', 'source-layer': 'water', paint: { 'fill-color': c.water, 'fill-opacity': 0.92 } },
     {
@@ -124,6 +136,15 @@ export function buildStyle(c: MapColors, dark: boolean): StyleSpecification {
         'symbol-sort-key': ['coalesce', ['get', 'rank'], 99] as ExpressionSpecification,
       },
       paint: { 'text-color': c.label, 'text-halo-color': c.halo, 'text-halo-width': 1.6, 'text-opacity': 0.85 },
+    },
+
+    {
+      id: 'county-label', type: 'symbol', source: 'counties', minzoom: 8.6,
+      layout: {
+        'text-field': ['upcase', ['get', 'name']] as ExpressionSpecification, 'text-font': FONT_BOLD, 'text-size': 9.5,
+        'text-letter-spacing': 0.12, 'text-max-width': 8, 'symbol-placement': 'point', 'text-padding': 20,
+      },
+      paint: { 'text-color': c.label, 'text-opacity': 0.55, 'text-halo-color': c.halo, 'text-halo-width': 2 },
     },
 
     // ---- landmarks (quiet, non-interactive) ----
@@ -173,6 +194,7 @@ export function buildStyle(c: MapColors, dark: boolean): StyleSpecification {
       zcta: { type: 'geojson', data: EMPTY as never, promoteId: 'zcta' },
       landmarks: { type: 'geojson', data: EMPTY as never },
       cbd: { type: 'geojson', data: EMPTY as never },
+      counties: { type: 'geojson', data: EMPTY as never },
       trails: { type: 'geojson', data: EMPTY as never },
       beads: { type: 'geojson', data: EMPTY as never },
       markers: { type: 'geojson', data: EMPTY as never },

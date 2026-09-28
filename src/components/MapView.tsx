@@ -16,6 +16,7 @@ interface Props {
   metro: MetroMeta
   data: MetroData | null
   geo: GeoJSON.FeatureCollection | null
+  counties: GeoJSON.FeatureCollection | null
   measure: Measure
   year: number
   toggles: CenterToggles
@@ -196,6 +197,7 @@ export default function MapView(p: Props) {
   useEffect(() => { if (ready.current) pushHighlight() }, [p.hoverZip, p.pinnedZip, p.geo]) // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { if (ready.current) pushCenters(true) }, [p.data, p.year, p.toggles]) // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { if (ready.current) pushCbd() }, [p.toggles.cbd, p.metro.id]) // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { if (ready.current) pushCounties() }, [p.toggles.counties, p.counties]) // eslint-disable-line react-hooks/exhaustive-deps
 
   function pushAll() {
     pushGeo()
@@ -213,6 +215,14 @@ export default function MapView(p: Props) {
       features: metro.landmarks.map((l) => ({ type: 'Feature', properties: { name: l.name }, geometry: { type: 'Point', coordinates: [l.lon, l.lat] } })),
     })
     pushCbd()
+    pushCounties()
+  }
+
+  function pushCounties() {
+    const map = mapRef.current!
+    const { counties, toggles } = props.current
+    ;(map.getSource('counties') as GeoJSONSource).setData(
+      counties && toggles.counties ? counties : { type: 'FeatureCollection', features: [] })
   }
 
   function pushCbd() {

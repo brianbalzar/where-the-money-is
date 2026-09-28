@@ -28,6 +28,8 @@ Get-File "22zpdoc.docx" @("https://www.irs.gov/pub/irs-soi/22zpdoc.docx") -Optio
 
 # Census 2020 ZCTA boundaries (cartographic, 1:500k)
 Get-File "cb_2020_us_zcta520_500k.zip" @("https://www2.census.gov/geo/tiger/GENZ2020/shp/cb_2020_us_zcta520_500k.zip")
+# 2023 county boundaries (includes Connecticut's planning regions, used by the 2023 metro definitions)
+Get-File "cb_2023_us_county_500k.zip" @("https://www2.census.gov/geo/tiger/GENZ2023/shp/cb_2023_us_county_500k.zip")
 # 2020 ZCTA gazetteer (internal points, land area)
 Get-File "2020_Gaz_zcta_national.zip" @("https://www2.census.gov/geo/docs/maps-data/data/gazetteer/2020_Gazetteer/2020_Gaz_zcta_national.zip")
 # 2020 block-group centers of population (for population-weighted ZIP points)

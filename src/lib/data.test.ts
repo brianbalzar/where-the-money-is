@@ -8,9 +8,10 @@ const root = new URL('../../public/data/', import.meta.url)
 const metros: MetrosFile = JSON.parse(readFileSync(new URL('metros.json', root), 'utf8'))
 
 describe('metros.json', () => {
-  it('lists 50 metros ranked 1..50 with unique ids', () => {
-    expect(metros.metros.length).toBe(50)
-    expect(new Set(metros.metros.map((m) => m.id)).size).toBe(50)
+  it('lists the top 100 metros with unique ids, including Connecticut', () => {
+    expect(metros.metros.length).toBe(100)
+    expect(new Set(metros.metros.map((m) => m.id)).size).toBe(100)
+    for (const ct of ['25540', '14860', '35300']) expect(metros.metros.some((m) => m.id === ct), ct).toBe(true)
     expect(metros.metros.map((m) => m.rank)).toEqual([...metros.metros.map((m) => m.rank)].sort((a, b) => a - b))
   })
   it('every metro has a CBD inside its map extent, and DFW/MSP use the dominant downtown', () => {

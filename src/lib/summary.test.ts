@@ -31,7 +31,7 @@ describe('neighborWindow', () => {
 describe('cross-metro rankings on the real data', () => {
   it('current gap: rank 1 is the widest', () => {
     const r = rankGap(mf, last)
-    expect(r.length).toBe(50)
+    expect(r.length).toBe(mf.metros.length)
     for (let i = 1; i < r.length; i++) expect(r[i].value).toBeLessThanOrEqual(r[i - 1].value + 0.1)
     expect(r[0].rank).toBe(1)
   })
@@ -42,7 +42,7 @@ describe('cross-metro rankings on the real data', () => {
     const tampa = byId('45300')
     expect(gapChange(tampa, last)).toBeCloseTo(Number(tampa.summary.gapMi[last].toFixed(1)) - Number(tampa.summary.gapMi[0].toFixed(1)), 9)
   })
-  it('ranks are 1..50 with no gaps except after ties', () => {
+  it('ranks are 1..N with no gaps except after ties', () => {
     for (const r of [rankGap(mf, last), rankIncome(mf, last), rankShare(mf, last)]) {
       r.forEach((x, i) => expect(x.rank === i + 1 || (x.tied && x.rank === r[i - 1].rank)).toBe(true))
     }
@@ -55,7 +55,7 @@ describe('metroStats', () => {
     expect(s.avgIncome).toBe(t.summary.avgIncome[last])
     expect(s.share200k).toBe(t.summary.share200k[last])
     expect(s.realChangePct).toBe(Math.round((t.summary.avgIncome[last] / t.summary.avgIncome[0] - 1) * 100))
-    expect(s.incomeRank).toMatch(/^(tied )?#\d+ of 50$/)
+    expect(s.incomeRank).toMatch(new RegExp(`^(tied )?#\\d+ of ${mf.metros.length}$`))
   })
   it('base year has no real change', () => expect(metroStats(mf, byId('45300'), 0).realChangePct).toBeNull())
   it('missing values degrade to null, not NaN', () => {
